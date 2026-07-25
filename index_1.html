@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Văn Hóa Việt · Ôn tập trắc nghiệm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN TOKENS — Lacquerware & Đông Sơn drum inspired palette
+   ============================================================ */
+:root{
+  --lacquer-black:#171310;
+  --lacquer-surface:#211b16;
+  --lacquer-surface-2:#2a2219;
+  --lacquer-border:#3c3123;
+  --gold:#cba135;
+  --gold-soft:#e4c766;
+  --lacquer-red:#a6283c;
+  --lacquer-red-soft:#c94a5c;
+  --jade:#3b7a57;
+  --jade-soft:#5a9c76;
+  --paper:#f3ead4;
+  --paper-card:#fffdf8;
+  --ink:#2a2118;
+  --ink-soft:#6b5f4c;
+
+  --bg:var(--lacquer-black);
+  --surface:var(--lacquer-surface);
+  --surface-2:var(--lacquer-surface-2);
+  --border:var(--lacquer-border);
+  --text:#efe6d4;
+  --text-soft:#b8ab90;
+  --accent:var(--gold);
+  --accent-soft:var(--gold-soft);
+  --danger:var(--lacquer-red);
+  --success:var(--jade);
+  --success-soft:var(--jade-soft);
+
+  --radius:14px;
+  --radius-sm:8px;
+  --shadow:0 10px 30px -10px rgba(0,0,0,.5);
+  --font-display:'Fraunces', serif;
+  --font-body:'Be Vietnam Pro', sans-serif;
+}
+html[data-theme="light"]{
+  --bg:var(--paper);
+  --surface:var(--paper-card);
+  --surface-2:#fbf6ea;
+  --border:#e3d5ae;
+  --text:var(--ink);
+  --text-soft:var(--ink-soft);
+  --accent:#9c7a1f;
+  --accent-soft:#7d6119;
+  --shadow:0 10px 30px -12px rgba(60,45,10,.25);
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-body);
+  transition:background .4s ease, color .4s ease;
+  min-height:100vh;
+}
+body::before{
+  content:"";
+  position:fixed;inset:0;
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(203,161,53,.05), transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(166,40,60,.06), transparent 45%);
+  pointer-events:none;
+  z-index:0;
+}
+h1,h2,h3,.font-display{font-family:var(--font-display);}
+button{font-family:inherit;}
+::selection{background:var(--gold);color:var(--lacquer-black);}
+
+/* Focus visibility */
+a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible{
+  outline:2px solid var(--gold);
+  outline-offset:2px;
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001ms !important; transition-duration:.001ms !important;}
+}
+
+/* ============ Signature motif: Đông Sơn drum rings ============ */
+.drum-mark{
+  width:38px;height:38px;flex:none;
+}
+.drum-mark svg{width:100%;height:100%;display:block;}
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.app{
+  position:relative;z-index:1;
+  max-width:900px;
+  margin:0 auto;
+  padding:20px 18px 90px;
+}
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:6px 2px 22px;
+}
+.brand{display:flex;align-items:center;gap:12px;}
+.brand h1{
+  font-size:22px;
+  margin:0;
+  letter-spacing:.2px;
+  font-weight:600;
+}
+.brand .sub{
+  display:block;
+  font-family:var(--font-body);
+  font-size:11.5px;
+  letter-spacing:1.6px;
+  text-transform:uppercase;
+  color:var(--accent);
+  font-weight:600;
+  margin-top:2px;
+}
+.top-actions{display:flex;align-items:center;gap:8px;}
+
+.icon-btn{
+  width:40px;height:40px;
+  border-radius:50%;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  transition:transform .2s ease, border-color .2s ease, background .3s ease;
+}
+.icon-btn:hover{border-color:var(--accent); transform:translateY(-1px);}
+.icon-btn svg{width:19px;height:19px;}
+
+/* Tabs */
+.tabs{
+  display:flex;
+  gap:6px;
+  overflow-x:auto;
+  padding-bottom:4px;
+  margin-bottom:22px;
+  scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar{display:none;}
+.tab-btn{
+  flex:none;
+  padding:9px 16px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--text-soft);
+  font-size:14px;
+  font-weight:500;
+  cursor:pointer;
+  display:flex;align-items:center;gap:7px;
+  transition:all .25s ease;
+  white-space:nowrap;
+}
+.tab-btn:hover{color:var(--text); border-color:var(--accent);}
+.tab-btn.active{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:var(--lacquer-black);
+  font-weight:600;
+}
+html[data-theme="light"] .tab-btn.active{color:#fffdf8;}
+
+.view{display:none; animation:fadeIn .35s ease;}
+.view.active{display:block;}
+@keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+/* ============================================================
+   CONTROLS: search / filter / progress
+   ============================================================ */
+.control-row{
+  display:flex;
+  gap:10px;
+  margin-bottom:14px;
+  flex-wrap:wrap;
+}
+.search-box{
+  flex:1 1 220px;
+  position:relative;
+}
+.search-box input{
+  width:100%;
+  padding:11px 14px 11px 40px;
+  border-radius:var(--radius-sm);
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  font-size:14.5px;
+  font-family:var(--font-body);
+}
+.search-box input::placeholder{color:var(--text-soft);}
+.search-box svg{
+  position:absolute; left:13px; top:50%; transform:translateY(-50%);
+  width:16px;height:16px; color:var(--text-soft); pointer-events:none;
+}
+.filter-select{
+  padding:11px 14px;
+  border-radius:var(--radius-sm);
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  font-size:14px;
+  font-family:var(--font-body);
+  cursor:pointer;
+}
+
+.progress-wrap{
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:18px;
+  padding:14px 16px;
+  border-radius:var(--radius-sm);
+  background:var(--surface);
+  border:1px solid var(--border);
+}
+.progress-ring{flex:none; width:44px;height:44px;}
+.progress-info{flex:1;}
+.progress-info .label{font-size:12.5px; color:var(--text-soft); margin-bottom:4px;}
+.progress-info .value{font-size:14.5px; font-weight:600;}
+.progress-bar-track{
+  height:6px; border-radius:4px; background:var(--border); overflow:hidden; margin-top:6px;
+}
+.progress-bar-fill{
+  height:100%; background:linear-gradient(90deg, var(--jade), var(--gold));
+  border-radius:4px; transition:width .5s cubic-bezier(.4,0,.2,1);
+}
+
+/* ============================================================
+   CARD (question)
+   ============================================================ */
+.card-stage{position:relative; min-height:420px;}
+.q-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:28px 26px 24px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+  animation:cardIn .4s cubic-bezier(.3,0,.2,1);
+}
+@keyframes cardIn{from{opacity:0; transform:translateX(14px) scale(.985);} to{opacity:1; transform:translateX(0) scale(1);}}
+.q-card::after{
+  content:"";
+  position:absolute; inset:0;
+  border-radius:var(--radius);
+  padding:1px;
+  background:linear-gradient(135deg, var(--gold) 0%, transparent 18%, transparent 82%, var(--gold) 100%);
+  opacity:.35;
+  -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor; mask-composite:exclude;
+  pointer-events:none;
+}
+.q-meta{
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:14px;
+}
+.q-counter{
+  font-size:12.5px; letter-spacing:1px; text-transform:uppercase;
+  color:var(--accent); font-weight:600;
+}
+.q-tools{display:flex; gap:8px;}
+.tool-btn{
+  width:34px;height:34px; border-radius:8px;
+  border:1px solid var(--border); background:var(--surface-2);
+  color:var(--text-soft);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:all .2s ease;
+}
+.tool-btn svg{width:16px;height:16px;}
+.tool-btn:hover{color:var(--text); border-color:var(--accent);}
+.tool-btn.on{color:var(--gold); border-color:var(--gold); background:rgba(203,161,53,.12);}
+.tool-btn.learned-on{color:var(--success); border-color:var(--success); background:rgba(59,122,87,.14);}
+.tool-btn.translate-on{color:var(--jade-soft); border-color:var(--jade-soft); background:rgba(59,122,87,.12);}
+.tool-btn-dich{
+  width:748px; height:48px; border-radius:999px;
+  border:1px solid var(--accent); background:var(--surface-2);
+  color:var(--text);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:all .2s ease;
+  position:fixed; right:22px; bottom:22px; z-index:1200;
+  box-shadow:0 10px 24px rgba(0,0,0,.16);
+}
+/* SIZE FLAG: chỉnh width/height/right/bottom ở đây */
+.tool-btn-dich svg{width:20px;height:20px;}
+.tool-btn-dich:hover{color:var(--accent); border-color:var(--accent); transform:translateY(-2px);}
+
+/* ============================================================
+   TRANSLATE BOX — Vietnamese meaning helper
+   ============================================================ */
+.translate-box{
+  display:none;
+  margin-top:16px;
+  padding:16px 16px 14px;
+  border-radius:var(--radius-sm);
+  background:var(--surface-2);
+  border:1px dashed var(--jade-soft);
+}
+.translate-box.open{display:block; animation:fadeIn .3s ease;}
+.translate-label{
+  display:flex; align-items:center; gap:7px;
+  font-size:11.5px; letter-spacing:1px; text-transform:uppercase;
+  color:var(--jade-soft); font-weight:600; margin-bottom:10px;
+}
+.translate-label svg{width:14px;height:14px;}
+.translate-q{
+  font-family:var(--font-display);
+  font-size:16.5px; line-height:1.5; font-weight:500;
+  margin:0 0 10px; color:var(--text);
+}
+.translate-opts{display:flex; flex-direction:column; gap:6px;}
+.translate-opt{display:flex; align-items:flex-start; gap:10px; font-size:14px; color:var(--text-soft);}
+.translate-opt .letter{
+  flex:none; width:20px;height:20px; border-radius:6px;
+  background:rgba(59,122,87,.15); color:var(--jade-soft);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11.5px; font-weight:700;
+}
+.translate-loading, .translate-error{
+  font-size:13.5px; color:var(--text-soft); display:flex; align-items:center; gap:8px;
+}
+.translate-loading svg{width:14px;height:14px; animation:spin 1s linear infinite;}
+.translate-error{color:var(--lacquer-red-soft);}
+@keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+
+.q-text{
+  font-family:var(--font-display);
+  font-size:20px;
+  line-height:1.5;
+  font-weight:500;
+  margin:0 0 22px;
+}
+
+.options{display:flex; flex-direction:column; gap:10px;}
+.option{
+  display:flex; align-items:flex-start; gap:12px;
+  padding:13px 14px;
+  border-radius:var(--radius-sm);
+  border:1px solid var(--border);
+  background:var(--surface-2);
+  transition:all .25s ease;
+  cursor:default;
+  font-size:14.5px;
+  line-height:1.5;
+}
+.option .letter{
+  flex:none;
+  width:26px;height:26px;
+  border-radius:50%;
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12.5px; font-weight:700;
+  color:var(--text-soft);
+  font-family:var(--font-body);
+}
+.option.correct-reveal{
+  border-color:var(--success);
+  background:rgba(59,122,87,.14);
+}
+.option.correct-reveal .letter{
+  background:var(--success); border-color:var(--success); color:#fff;
+}
+.option.quiz-selected{border-color:var(--accent); background:rgba(203,161,53,.1);}
+.option.quiz-selected .letter{background:var(--accent); border-color:var(--accent); color:var(--lacquer-black);}
+.option.quiz-wrong{border-color:var(--danger); background:rgba(166,40,60,.12);}
+.option.quiz-wrong .letter{background:var(--danger); border-color:var(--danger); color:#fff;}
+.option.quiz-clickable{cursor:pointer;}
+.option.quiz-clickable:hover{border-color:var(--accent);}
+.option.dim{opacity:.55;}
+
+.reveal-wrap{margin-top:6px;}
+.reveal-btn{
+  width:100%;
+  padding:13px;
+  border-radius:var(--radius-sm);
+  border:1px dashed var(--border);
+  background:transparent;
+  color:var(--text-soft);
+  font-size:14px; font-weight:600;
+  cursor:pointer;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  transition:all .25s ease;
+}
+.reveal-btn:hover{border-color:var(--gold); color:var(--gold);}
+.reveal-btn svg{width:17px;height:17px;}
+
+.answer-banner{
+  margin-top:14px;
+  padding:12px 14px;
+  border-radius:var(--radius-sm);
+  background:rgba(59,122,87,.14);
+  border:1px solid var(--success);
+  color:var(--success);
+  font-size:14px; font-weight:600;
+  display:flex; align-items:center; gap:8px;
+  animation:fadeIn .3s ease;
+}
+.answer-banner svg{width:17px;height:17px; flex:none;}
+
+/* ============================================================
+   NAV CONTROLS (prev/next/random/first/last)
+   ============================================================ */
+.nav-row{
+  display:flex; gap:8px; margin-top:18px; flex-wrap:wrap;
+}
+.nav-btn{
+  flex:1 1 auto;
+  padding:11px 10px;
+  border-radius:var(--radius-sm);
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  font-size:13.5px; font-weight:600;
+  display:flex; align-items:center; justify-content:center; gap:6px;
+  cursor:pointer;
+  transition:all .2s ease;
+}
+.nav-btn svg{width:15px;height:15px;}
+.nav-btn:hover{border-color:var(--accent); color:var(--accent); transform:translateY(-1px);}
+.nav-btn.primary{background:var(--accent); border-color:var(--accent); color:var(--lacquer-black);}
+html[data-theme="light"] .nav-btn.primary{color:#fffdf8;}
+.nav-btn.primary:hover{color:var(--lacquer-black); opacity:.9;}
+.nav-btn:disabled{opacity:.4; cursor:not-allowed; transform:none;}
+
+.bulk-row{display:flex; gap:8px; margin-top:10px;}
+.bulk-row .nav-btn{font-weight:500; font-size:13px;}
+
+/* Empty state */
+.empty-state{
+  text-align:center; padding:60px 20px;
+  color:var(--text-soft);
+}
+.empty-state svg{width:52px;height:52px; margin-bottom:14px; opacity:.5;}
+.empty-state p{margin:4px 0; font-size:14.5px;}
+
+/* ============================================================
+   FLASHCARD
+   ============================================================ */
+.flash-stage{perspective:1600px; min-height:340px;}
+.flash-card{
+  position:relative;
+  width:100%; min-height:340px;
+  transform-style:preserve-3d;
+  transition:transform .6s cubic-bezier(.4,.2,.2,1);
+  cursor:pointer;
+}
+.flash-card.flipped{transform:rotateY(180deg);}
+.flash-face{
+  position:absolute; inset:0;
+  backface-visibility:hidden;
+  border-radius:var(--radius);
+  border:1px solid var(--border);
+  background:var(--surface);
+  box-shadow:var(--shadow);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center;
+  padding:36px 30px;
+}
+.flash-face .eyebrow{
+  font-size:11.5px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--accent); font-weight:700; margin-bottom:16px;
+}
+.flash-face .content{
+  font-family:var(--font-display);
+  font-size:21px; line-height:1.55; font-weight:500;
+}
+.flash-back{transform:rotateY(180deg);}
+.flash-back .content{color:var(--success); font-size:19px;}
+.flash-hint{
+  position:absolute; bottom:16px; left:0; right:0;
+  text-align:center; font-size:12px; color:var(--text-soft);
+}
+
+/* ============================================================
+   QUIZ MODE
+   ============================================================ */
+.quiz-progress{
+  display:flex; justify-content:space-between; font-size:13px; color:var(--text-soft); margin-bottom:10px;
+}
+.quiz-score-badge{
+  font-weight:700; color:var(--accent);
+}
+.quiz-result{
+  text-align:center; padding:50px 24px;
+}
+.quiz-result .score-big{
+  font-family:var(--font-display); font-size:52px; font-weight:600; color:var(--accent);
+  margin-bottom:6px;
+}
+.quiz-result p{color:var(--text-soft); font-size:15px;}
+
+/* ============================================================
+   STATS
+   ============================================================ */
+.stats-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:14px; margin-bottom:22px;
+}
+.stat-card{
+  padding:20px 18px; border-radius:var(--radius);
+  background:var(--surface); border:1px solid var(--border);
+  text-align:left;
+}
+.stat-card .num{font-family:var(--font-display); font-size:32px; font-weight:600;}
+.stat-card .lbl{font-size:12.5px; color:var(--text-soft); margin-top:4px; letter-spacing:.3px;}
+.stat-card.accent .num{color:var(--gold);}
+.stat-card.success .num{color:var(--success);}
+.stat-card.danger .num{color:var(--lacquer-red-soft);}
+
+.completion-block{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:22px 22px 24px; margin-bottom:18px;
+}
+.completion-block h3{margin:0 0 14px; font-size:16px; font-weight:600;}
+.big-bar-track{height:12px; border-radius:8px; background:var(--border); overflow:hidden;}
+.big-bar-fill{height:100%; background:linear-gradient(90deg, var(--jade), var(--gold)); border-radius:8px; transition:width .6s ease;}
+.completion-pct{font-family:var(--font-display); font-size:15px; margin-top:10px; color:var(--text-soft);}
+
+/* ============================================================
+   UPLOAD PANEL
+   ============================================================ */
+.upload-panel{
+  background:var(--surface); border:1px dashed var(--border); border-radius:var(--radius);
+  padding:18px 20px; margin-bottom:20px; display:none;
+}
+.upload-panel.open{display:block; animation:fadeIn .3s ease;}
+.upload-panel h3{margin:0 0 8px; font-size:15px;}
+.upload-panel p{margin:0 0 12px; font-size:13px; color:var(--text-soft); line-height:1.6;}
+.upload-panel input[type=file]{font-size:13px; color:var(--text-soft);}
+.upload-status{margin-top:10px; font-size:13px; font-weight:600;}
+
+/* keyboard hint footer */
+.kbd-hint{
+  text-align:center; font-size:12px; color:var(--text-soft); margin-top:26px;
+  display:flex; justify-content:center; gap:14px; flex-wrap:wrap;
+}
+.kbd-hint kbd{
+  background:var(--surface-2); border:1px solid var(--border); border-radius:5px;
+  padding:2px 6px; font-family:var(--font-body); font-size:11px;
+}
+
+/* toast */
+.toast{
+  position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px);
+  background:var(--surface); border:1px solid var(--gold); color:var(--text);
+  padding:11px 20px; border-radius:999px; font-size:13.5px; font-weight:600;
+  box-shadow:var(--shadow); opacity:0; pointer-events:none; transition:all .3s ease;
+  z-index:50; display:flex; align-items:center; gap:8px;
+}
+.toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+@media (max-width:560px){
+  .q-text{font-size:18px;}
+  .nav-row{gap:6px;}
+  .nav-btn{font-size:12px; padding:10px 6px;}
+  .brand h1{font-size:18px;}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="drum-mark" id="drumLogo"></div>
+      <div>
+        <h1>Văn Hóa Việt</h1>
+        <span class="sub">Ôn tập trắc nghiệm</span>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn" id="uploadToggleBtn" title="Nạp file câu hỏi khác">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      </button>
+      <button class="icon-btn" id="themeToggleBtn" title="Chuyển giao diện sáng / tối"></button>
+    </div>
+  </div>
+
+  <div class="upload-panel" id="uploadPanel">
+    <h3>Nạp bộ câu hỏi khác (.txt)</h3>
+    <p>Tải lên một file .txt khác theo định dạng: câu hỏi, các dòng đáp án A/B/C/D, rồi dòng đáp án đúng (ví dụ chỉ chứa "A"). Ứng dụng sẽ tự phân tích và thay thế bộ câu hỏi hiện tại.</p>
+    <input type="file" id="fileInput" accept=".txt">
+    <div class="upload-status" id="uploadStatus"></div>
+  </div>
+
+  <div class="tabs" id="tabs">
+    <button class="tab-btn active" data-tab="study">📖 Ôn tập</button>
+    <button class="tab-btn" data-tab="flash">🔄 Flashcard</button>
+    <button class="tab-btn" data-tab="quiz">✍️ Quiz</button>
+    <button class="tab-btn" data-tab="bookmarks">⭐ Đã đánh dấu</button>
+    <button class="tab-btn" data-tab="stats">📊 Thống kê</button>
+  </div>
+
+  <!-- ============ STUDY VIEW ============ -->
+  <div class="view active" id="view-study"></div>
+  <!-- ============ FLASHCARD VIEW ============ -->
+  <div class="view" id="view-flash"></div>
+  <!-- ============ QUIZ VIEW ============ -->
+  <div class="view" id="view-quiz"></div>
+  <!-- ============ BOOKMARKS VIEW ============ -->
+  <div class="view" id="view-bookmarks"></div>
+  <!-- ============ STATS VIEW ============ -->
+  <div class="view" id="view-stats"></div>
+
+  <div class="kbd-hint" id="kbdHint">
+    <span><kbd>←</kbd> <kbd>→</kbd> chuyển câu</span>
+    <span><kbd>Space</kbd> hiện đáp án</span>
+    <span><kbd>B</kbd> đánh dấu</span>
+    <span><kbd>R</kbd> ngẫu nhiên</span>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const QUESTIONS_RAW = [["What are the three major Buddhist traditions? (NHUNG HOÀNG)","Theravada","Mahayana","Vajrayana","All are correct","D"],["What kind of climate does Vietnam have?(NHUNG HOÀNG)","Tropical Monsoon","Temperate Monsoon","Humid continental","Mediterranean","A"],["Which of the following statements about Vietnam is INCORRECT?","The map resembles the letter \"S\" or a shoulder pole with a rice basket at each end.","Vietnam is located in the heart of Southeast Asia.","Vietnam's nickname is \"Balcony of the Pacific\".","None are correct","D"],["How many minority groups are there in Vietnam?","53","54","52","50","A"],["Choose the INCORRECT statement(NHUNG HOÀNG)","Vietnam is a multi-ethnic country with a total of 54 ethnic groups living together.","The Vietnamese language belongs to the Viet-Muong branch of the Mon-Khmer language family.","Vietnam became the official country name, for the first time, in the reign of Emperor Gia Long, in 1804.","The Hoa people do not belong to the ethnic minority groups in Vietnam.","D"],["Fill in the blank with the correct words: The fathers' older siblings are called...","Cau","Chu","Bac","Ong","C"],["How many tones does Vietnamese have?(NHUNG HOÀNG)","4","5","6","None of the above","C"],["The paper-making technique existed in Vietnam during which period?","Legendary Hung Kings period","Northern Domination period","Great Viet period","French Domination period","B"],["Fill in the blank: Champa was formed on the basis of the development of the ... culture along with strong assimilation of major cultures (India, China, Dai Viet, Oc Eo - Funan, Southeast Asia).","Oc Eo","Phu Nam","Sa Huynh","Đong Son","C"],["Which of the following achievements is not a cultural achievement of the Ly dynasty?","Quy Dien Bell (1080)","Bao Thien Tower (1057)","Statue of Adida at Phat Tich pagoda","Pho Minh Cauldron (1262)","D"],["The capital city Thang Long was planned with 36 craft street during which period?","Đinh dynasty","The time of Early Le dynasty","Ly dynasty","Tran dynasty","C"],["The statement \"More than half of the population are farmers, and there is a pagoda in every village\" by historian Le Van Huu refers to which period?","Đinh dynasty","The time of Early Lê dynasty","Ly dynasty","Tran dynasty","C"],["Which is the cause of the French colonial invasion of Vietnam?(NHUNG HOÀNG)","Demand for markets and colonies from the mid-19th century of Western countries.","Vietnam has an important geographical position, is rich in natural resources, and had weakened feudalism.","Using the pretext of defending Catholicism","All are correct","D"],["Which of the following statement about Vietnam under the Nguyen Dynasty is CORRECT(073-356-8678)","The Village was the basic administrative and social unit of rural life.","The Nguyen dynasty (1802-1945) began with the reign of Emperor Thanh Thai.","During the 17th and 18th centuries the Nguyen restricted Vietnamese settlement into lands formerly occupied by the Chams and the Cambodians.","None of the above","A"],["Which of the following statements about Vietnamese Nationalism is INCORRECT?(NHUNG HOÀNG)","Before the start of the Marxism movement, the Vietnamese revolution lack of outline and leadership.","The rise of Nationalism can be divided into 3 stages: Traditionalists, who wanted to restore the monarchy; Western-oriented non-communists; and Western-oriented communists.","Nationalist Party of Vietnam was formed under the leadership of Nguyen Thai Hoc and modeled after the Kuomintang of Nationalist China.","Phan Boi Chau and The 'Dong Du Movement' (1905-1908) was an example of Western-oriented communists.","D"],["Which of the following is not The three paths of conduct on the Buddhist dharma wheel?(NHUNG HOÀNG)","We must have respect for the truth.","Living in harmony with all the other aspects of the Buddha's teachings.","We should not do work that involves killing (including the slaughtering of animals) or dealing in slaves, weapons, poisons, or intoxicants (drug or alcohol).","We must not see things through the lens of negative emotions.","D"],["Who founded the Hoa Hao movement?","Huynh Phu So","Pham Cong Tac","Le Van Trung","None of the above","A"],["Linga and Yoni are symbols of religious beliefs in the culture of which ethnic group?","Muong people,","Cham people,","Kho-me people,","E de people","B"],["Which one of the following statements about animism is INCORRECT?","Pre-colonial villagers have children with unattractive names so that spirits would not harm them.","Under pre-colonial times, in many families, children were referred to by their family ranking instead of by","Pre-colonial Viet believed that spirits inhabited rocks, trees, animals, and the rest of the natural world.","Humans were believed to have three kinds of souls: 'hon', 'phach', and 'via'.","D"],["What language was Binh Ngo Dai Cao written in?(NHUNG HOÀNG)","Chinese characters","Nom script","Latin letters","The National language","A"],["Fill in the blank: Ho Xuan Huong (1772- 1822) was a famous Vietnamese poet during the late Le and early Nguyen periods. Ho Xuan Huong was nicknamed\".....\" because of her great contributions in the field of Nom poetry.","\"The Queen of National Language Poetry.\"","\"The Queen of Nom Poetry.\"","\"The Queen of Tang Poetry.\"","\"The Queen of Classical Chinese Poetry.\"","B"],["When was Quoc Ngu introduced?","19th century","15th century","18th century","17th century","D"],["Who was the first \"rédacteur en Chef\" (as General Director) of Gia Dinh Newspaper?(NHUNG HOÀNG)","Truong Vinh Ky","Huynh Tinh Cua","Pham Quynh","Nguyen Khac Hieu","A"],["Who was the \"Second Generation\" of Resistance Literature?","Nguyen Dinh Thi","Nguyen Cong Hoan","Ngo Tat To","Chu Van","A"],["In the wood-block painting, Which becomes a family heirloom, passed on from generation to generation?","The finished block with precise carving","The drawing of the motif on paper","The demo carving block","None are correct","A"],["The large part of pre-colonial art and architecture of Vietnam was made by?","The artisans who were carefully selected by the court.","Anonymous and unrecognized artisans","The artisans who can afford to organize their own exhibitions.","None of the above","B"],["Which makes the Bat Trang brushwork is recognizable?(NHUNG HOÀNG)","The brushwork's lightness and spontaneity and its blurred, uneven intensity","The brushwork's darkness and spontaneity and its sharpen","The brushwork's darkness and discipline and its sharpen","None of the above","A"],["When did the making of ceramics (gom) in Viet lands date?","Neolithic times","Paleolithic times","Mesolithic times","Glacial period","A"],["Due to the nature of performers having to stand in the water for hours, during what kind of weather do puppet shows usually take place in?","in warm weather","in cold weather.","in balmy weather.","in sunny weather.","A"],["During the French colonial period, urban Vietnamese were largely unaware of the existence of water puppetry because only local rural villagers were familiar with such agricultural activities. As a result, water puppets did not reflect life in which environment?","urban life","rural life","middle-class life,","upper-class life","A"],["Choose the INCORRECT statement about Vietnam architecture(NHUNG HOÀNG)","The existence of Vietnamese military architecture with its varied edifices is explained by the constant necessity for the country to defend itself against invasion and the concurrent construction of numerous citadels.","The civilian architecture includes imperial palaces as well as habitations of peasants and mandarins, infrastructure, and so forth.","Like the religious and military buildings, the Vietnamese civilian architectures were usually built to last.","Because of the lack of space in the city, the disposition of the rooms is often compressed, with the rooms succeeding one another along a single axis.","C"],["Which architecture category does The Ho citadel belong to?","Religious","Military","Civilian","None of the above","B"],["When eating, where should chopsticks not be touched?","Lips, teeth, or tongue","Lips","Teeth","Tongue","A"],["Should we return used food to the family plate?","Limit","Unauthorized","Encourage","Not to mention","B"],["When visiting a Vietnamese house, guests should avoid which of the following?","Arrive on time for dinner","Come on break","Unbidden","Arrive on time for dinne, come on break, unbidden","C"],["What is disrespectful in Vietnamese culture, especially in Pre-colonial Times?","Family members were not to start eating until the senior male of the household had begun the meal","Just leave the meal right after you finished it, don't need to pay attention to anyone else in the meal","Diners were not to move food directly from the communal bowls to their mouths","Chopsticks were never placed upright, sticking out of the food","B"],["Steamed tapico layer (Banh da lon) is famous in:(073-356-8678)","In the center provinces Viet Nam","In the north of Viet Nam","In the south provinces of Viet Nam","In The high land provinces of Viet Nam","C"],["Choose the NOT TRUE statement","Pre-colonial Viet enjoyed a wide variety of cakes, candies, and puddings.","Candies called mut were made from papayas, coconuts, lemons, and other fruits .","Pre-colonial Viet also used 'che' as desserts.","In pre-colonial times, \"Ice cream cafes\" was gained popularity, especially in Vietnamese middle-class youths.","D"],["Fill in the blank with the correct words \"I have never missed anyone the way I miss .... Every time I bury the pipe, I have to dig it up again.\"(NHUNG HOÀNG)","Thuoc lao","Electronic cigarettes","Betel Leave and Areca Nut","Gum","A"],["During the war, the old railway line running across the country was heavily damaged by air strikes from..... in the North","American air raids","Chinese air raids","British air raids","Japanese air raids","A"],["Why is Quan Am represented with one thousand eyes and one thousand arms?","To show her incessant activity and vigilance","To further decorate the statue","To see through the past of living beings","","A"],["What is NOT TRUE about Generation 2000(NHUNG HOÀNG)","Their first concern is job-related","They tend to seek the most elusive attainment of \"happiness\" through friendship and love","Many young men have taken up the Western baseball cap","Vietnamese youth haven't adopted Western style fashion","D"],["The celebration of festivals in pre-colonial Vietnam was regulated by .....","a Lunar Calendar","a Solar Calendar","Gregorian Calendar","None are correct","A"],["In Vietnamese culture, what qualities are often considered the most important in family relationships?(NHUNG HOÀNG)","Respect and Reason","Understanding and Understanding","Love and Care","Reverence and Gratitude","D"],["Which is NOT the primary festivals celebrated by pre-colonial Vietnamese?","New Year's Festival","Cold Foods Festival","Pure Brightness Festival","International Workers' Day","D"],["Choose the NOT TRUE statement","In the middle 1990s, Private sponsorship of sporting activities, long frowned upon by the authorities, began to emerge as an alternative source of funding.","After the Renovation movement began in the late 1980s, the state increased significantly its support for athletic activities at all levels.","After the Renovation movement began in the late 1980s, the state reduced its support for athletic activities at all levels.","In contemporary Vietnam, a variety of sports as well as amusements associated with Western pop culture are taking up the relay and replacing the traditional leisure activities","B"],["Which is not encompassed Vietnamese Zodiac animals?(NHUNG HOÀNG)","Dragon","Rabbit","Cat","Rooster","B"],["Which musical instruments below consist of ten hollow bamboo pipes strung together and set on the ground; the performer claps hands near the mouths of the pipes, producing musical notes?(NHUNG HOÀNG)","Xylophone","Bronze gongs","Bamboo mouth organs","None of the above","A"],["What is the traditional music genre originating from South Vietnam?","Ca Tru","Don ca tai tu","Hat A Dao","A and C are correct","B"],["Which is Vietnamese traditional music from a particular country, region, or community?(NHUNG HOÀNG)","Blues","Rock and roll music","Folk music","Classical music","C"],["Which insect is a famous source of animal protein in Southern Vietnam?","Palm grub","Grasshopper","Stinkbug","Walking stick","A"],["Which insect is a famous source of animal protein in Northern Vietnam?","Palm grub","Grasshopper","Stinkbug","Walking stick","B"],["Which belief system has not been classified by UNESCO as intangible cultural heritage of humanity?","Ancestor worship belief","Mother Goddess worship belief","Hung Kings worship belief","Practice of Then belief by the Tay, Nung, and Thai people","A"],["The work \"The Tale of Kieu\" by the great poet Nguyen Du (1766-1820) includes how many six-eight verses?","3254","3255","3256","3257","A"],["In what language was \"The Tale of Kieu\" by Nguyen Du (1766 - 1820) written?","Chinese characters","Nom script","Latin letters","The National language","B"],["Which is the important unit in the traditional calendar?","A sixty-year cycle","A ten-year cycle","A twelve-year cycle","A five-year cycle","A"],["Which referred to central Vietnam and means \"pacified South\"?(NHUNG HOÀNG)","Tonkin","Annam","Cochinchine","None of the above","B"],["Which was considered as important, progress code and became a model for subsequent legal development in Vietnam?(NHUNG HOÀNG)","The Hong Duc Code","The Gia Long Code","The first Civil Code","National Criminal Code","A"],["Which of following statement about The Tran Dynasty is INCORRECT?","Tran Thai Tong founds the Tran dynasty through marriage to a Ly princess in 1225. The Tran had served as regents to the Ly.","Almost Tran Kings ruled the country in similar manner to the Ly Kings.","The Tran dynasty was a brilliant dynasty with 3 victories to defeat the Mong - Nguyen enemies.","Truc Lam Zen School is a Vietnamese Zen lineage formed during the Tran Dynasty, founded by King Tran Thanh Tong.","D"],["Choose the TRUE statement about the Vietnamese Family in Pre-colonial Times(NHUNG HOÀNG)","The \"clan\" included encompassed a number of families related to each other through a common male ancestor.","All clans in the society have a common lineage name or surname.","In this period, \"Pham\" is the most common lineage name or surname.","\"Clan\" refers to a group of clans collectively who usually do not involve in the mainstream culture of a particular nation.","A"],["How many letters are used in the Vietnamese Alphabet?","26","28","29","27","C"],["Which is the most common Vietnamese family name?(NHUNG HOÀNG)","Nguyen","Tran","Le","Pham","A"],["The space depicted in most water puppet performances is","Rice fields","Bamboo gate","Fish pond","Rice fields, Bamboo gate, Fish pond","D"],["Based on the passage provided about teachers at private schools in Hue, which of the following best describes the role played by teachers like Ton Quang Phiet, Professor Ta Quang Buu, and Cao Van Khanh in the community and historical events?","They were prominent leaders of the Boy Scout Movement in Hue.","They excelled in literature and made substantial contributions to the Revolution.","They primarily focused on teaching math and English at their respective schools.","They were well-known for their activism with the Tân Việt Revolutionary Party.","B"],["When did the high-quality Vietnamese ceramics start to be sold throughout Asia as far as Turkey and Japan?(NHUNG HOÀNG)","The 11th century","The 19th century","The 15th century","The 17th century","D"],["Who was not the \"First Generation\" of Resistance Literature?(NHUNG HOÀNG)","Nguyen Cong Hoan","Ngo Tat To","Nguyen Huy Tung","Nguyen Van Bong","D"],["Vietnamese water puppetry is a traditional folk performing art that originated in?","Rice paddy civilization","Nomadic civilization","Urban civilization","Maritime civilization","A"],["Which of the following Asian countries does NOT share a land border with Vietnam?(073-356-8678)","China","Laos","ThaiLand","India","D"],["How many strings does the \"sinh tien\" have?(NHUNG HOÀNG)","1","2","4","None are correct","D"],["Fill in the blank: The languages of ethnic groups in Vietnam are very diverse, consisting of... language families.","1","3","5","7","C"],["Would a person eating a meal be judged as not... when they transfer food directly from the shared plate to their mouth instead of putting it into their own plate or bowl?","Polite","Beautiful","Nice","Fun","A"],["Which of the following works was drafted by Nguyen Trai under the orders of Le Loi after defeating the Ming army? This work praises the victories of Dai Viet's army and people, affirming the autonomy and sovereignty of the Vietnamese people?","Binh Ngo Dai Cao","Quoc Am Thi Tap","Uc Trai Thi Tap","Chieu cau hien","A"],["One week before the New Year was to begin, each household celebrated ...","Le Vu Lan","Le Ruoc Ong Ba","Le Tao Quan","None are correct","C"],["assigned by the Jade Emperor after being transformed into deities? A. To protect households from evil spirits B. To record households' merits and demerits and report to the Jade Emperor annually C. To oversee the celebration of Tet festivities D. To guide ancestors back to their families during the New Year) Fill in the blank: In each village in the Red River Delta, there is a pond or lake that can be used as ....","A Communal house","a Pagoda","a Temple","a Theater","D"],["When was The Unified Buddhist Sangha of Vietnam founded?","In 1964","In 1975","In 1986","In 1968","A"],["How long did the Battle of Dien Bien Phu last?(NHUNG HOÀNG)","56 days","47 days","68 days","90 days","A"],["Polite rules at the Vietnamese dinnertable include which of the following criteria?","Do not touch any dishes with chopsticks","You should try a little something from every dish on the table as it arrives and not dwell on any dish for too long","Eating while speaking","Eat only one dish on the table until the end","B"],["When was the Indochina School of Fine Arts open?","In 1925","In 1950","In 1945","In 1858","A"],["Who was the Director and Editor-in-chief of Nam Phong magazine (published in Hanoi from 1917-1934)?","Truong Vinh Ky","Huynh Tinh Cua","Pham Quynh","Nguyen Khac Hieu","C"],["How many strings does the moon-shaped plucked lute have?(NHUNG HOÀNG)","1","2","16","4","B"],["Choose the INCORRECT statement","After the war, Vietnam had been devastated in many respects.","From 1976 to 1986, Vietnam implemented centralized economic planning, the nationalization of industry and agricultural collectivization.","Nguyen Van Linh is the current General Secretary of the Communist Party of Vietnam.","Vietnam first began its economic reform in 1986 by adopting the Doi Moi policy.","C"],["The regulations in traditional education, which included three examinations: local exams, provincial exams, royal exams, were established during which period?","Đinh dynasty","The time of Early Le dynasty","Ly dynasty","Tran dynasty","B"],["Fill in the blank: The Oc Eo culture was distributed in the lower reaches and the delta of the ... River (Southern Vietnam and Southeast Cambodia).","Me Kong river.","Đong Nai river.","Hong river.","Thai Binh river.","A"],["Who is the founder of the Taoism religion?(NHUNG HOÀNG)","Laozi","Kongzi","Zhuangzi","Zunzi","A"],["How many kings have the Nguyen dynasty?","12","13","14","15","B"],["The character who often appears in the opening scene of traditional water puppetry performances is who?","Teu","Phu ong","Quan lon","Nguoi nong dan","A"],["Fill in the blank: The influences of Western culture on Vietnamese culture include: _?","Press","National Language","Christianity","Newspapers, National Language, Christianity","D"],["What was the large part of Vietnamese pre-colonial art and architecture products made for?","The daily needs of the peasant and the luxury consumption of the elite","The needs of kings and mandarins","Just the needs of the artisan's own family","Export demand","A"],["Choose the NOT TRUE statement","The ten-year cycle has been repeated six times","The twelve-year cycle has been repeated five times","The ten-year cycle has been repeated five times","No named year is repeated within a single sixty-year cycle","C"],["In the absence of refrigeration, ... was often used as a method of preserving fish for later consumption.","Drying in the sun","Grilling","Boiling","Steaming","A"],["What societal expectations did daughters from orthodox families adhere to in ancient Vietnam?(NHUNG HOÀNG)","They were expected to pursue careers in politics and governance.","They were encouraged to explore creative arts and literature.","They were required to bind their breasts to avoid being labeled as indecent.","They were urged to engage in physical activities and sports for health benefits.","C"],["Which festival is organized on the fifteenth day of the eighth month of the lunar calendar?","Le Han Thuc","Le Thanh Minh","Le Doan Ngo","Tet Trung Thu","D"],["People in Dong Da district, Hanoi, celebrate Quang Trung's victory on what day every year?","On the Second Day of Tết","On the Third Day of Tết","On the Fourth Day of Tet","On the Fifth Day of Têt","D"],["What is the main material to make puppets(NHUNG HOÀNG)","Fig wood","Stones","Plastic","None are correct","A"],["Choose the NOT TRUE statement about Daily Fare in Vietnam(NHUNG HOÀNG)","The practice in pre-colonial times was to drink alcoholic beverages before the meal if desired, and tea afterward.","In modern life, we can have beverages throughout the meal, including soft drinks, beer, and iced coffee.","In the countryside, dinner is usually eaten at home after the family members have returned from their work.","Wheat remains the basic ingredient for every meal in Vietnam","D"],["Which one of the following statements about animism is CORRECT?","Spirits entered the body at conception or birth.","Spirits will forever leave a living person's body if the host suffered as fright, as reflected in the expression 'so mat hon'.","Men were believed to have three 'hon', and nine 'via'.","Under Pre-colonial time, a person's seventh year ('that tuan') was considered an important milestone.","D"],["Which of the following statements about Resistance Literature was CORRECT?(NHUNG HOÀNG)","Resistance works tend to engage in stereotyped characterizations and predictable narratives.","Resistance Literature was, in short, to serve the Party's goals of mobilizing the poeple for revolutionary struggle in all its facets.","Nguyen Van Bong was one of the \"Second Generation\" of Resistance Literature.","All are correct","D"],["Which was not included in the varieties of Vietnamese tea during(073-356-8678)","Dried tea","Grilled tea","Tea made from seeds","Milk tea","D"],["What was the French government encouraged Vietnamese under the colonial era to use by monopolies on its sale to private firms in return for a share of the profits?(NHUNG HOÀNG)","Opium","Coffee","Tea","Electronic cigarettes","A"],["Which type of ceramic was preferred to use in the 15th century?","Celadon-glazed ceramic made of fine white clay","Ivory glaze ceramic","Ox Blood Ceramics","Charcoal celadon ceramics","B"],["Which type of ceramic was preferred to use in the 11th-12th centuries?","Celadon-glazed ceramic made of fine white clay","Ivory glaze ceramic","Ox Blood Ceramics","Charcoal celadon ceramics","A"],["How old was the \"normal age\" to get married in Pre-colonial Times?","Fifteen for the boy and twelve to fourteen for the girl","Sixteen for the girl and eighteen for the boy","Eighteen for the girl and twenty for the boy","Fourteen for the girl and eighteen for the boy","B"],["What is NOT TRUE about Family Life in the SRV?(NHUNG HOÀNG)","The customs and values that once defined the Vietnamese in the pre-colonial times have suffered from the intrusion of the modern industrial world","Concern for the care of aging parents as well as the related notion of family honor remain at the core of the Vietnamese value system, but their past definitions have become murkier, and expectations have diminished","Arranged marriages were completely removed","Parents, relatives, and friends still somewhat attempt to match the parties (such as the parents choose criteria based on the social standing of the counterpart family)","C"],["Fill in the blank with CORRECT words ... contributed to the Vietnamese assimilation of staples such as soy sauce, bean curd, and noodles; as well as of techniques of food preparation and consumption including stirfrying and deep-frying with the wok and the use of chopstick (NHUNG HOÀNG)","The nearly 1000-year period of Chinese domination","The four centuries of Western dominance","The Southward Movement","All are correct","A"],["Choose the NOT TRUE statement about Utensils and Manners of Vietnam under Pre-colonial Times","Well-to-do families took their meals while seated upon a low table or tray, with food placed at its center.","Rice was served in communal bowls placed at the center of the table on a raised tray.","Gas was the preferred fuel","Family members were not to start eating until the senior male of the household had begun the meal by serving himself from the dishes presented on the 'mam'.","C"],["Who invented Quoc Ngu?","Catholic missionaries","Nguyen Van Vinh","Bui Hien","None are correct","A"],["... also played a role in pre-colonial cuisine, but it was a delicacy that was rarely eaten, even among the elite (NHUNG HOÀNG)","Dog Meat","Beef","Pork","Crabs","A"],["\"Carry a greater sadness in its pentatonic, half-tone scale\" are the characteristics of ....","Northern mode of Folk music","Southern mode of Folk music","Hue Royal Court Music","Hat Chau Van","B"],["Choose the NOT TRUE statement about Pre-colonial art and architecture","The skills of the artisans were undeniable as far back as the first millennium B.C.E","The skills of the artisans were undeniable as far back as the first century B.C.E","The remarkable objects made by Viet artisans can be found in museums or family collections","The materials of pre-colonial art and architecture of Vietnam could be bamboo, persimmon wood, palm leaf","B"],["What was the period of the recession of Buddhism in Vietnam? (NHUNG HOÀNG)","From the Le So to the Tay Son","From the Nguyen dynasty up to now","From the beginning of AD to the end of the Northern domination period","Dinh, Tien Le, Ly, Tran dynasties","A"],["Which Literature category did The Complete History of Great Viet belong to?","Written in Chinese characters","Written in Vernacular characters","Written in Egyptian hieroglyphs","Written in Romanized Script","A"],["Which are the inexhaustible well of inspiration to Vietnamese pre-colonial art and architecture artisans? (NHUNG HOÀNG)","The fusion of external elements (Buddhism, Confucianism, and Taoism) with domestic sources (their rural","The external elements such as Buddhism, Confucianism, and Taoism","The internal elements such as their rural and Animistic roots","None are correct","A"],["Vietnam's weather is controlled by seasonal monsoons called (NHUNG HOÀNG)","'gio mua'","'gio Lao'","'gio tin phong\"","None of the above","A"],["The ten-year cycle based on ...","repetitions of ten- and twelve-year cycles","a doubling of the five elements","zodiac animals","None are correct","B"],["The twelve-year cycle, based on ..(NHUNG HOÀNG)","repetitions of ten- and twelve-year cycles","a doubling of the five elements","zodiac animals","None are correct","C"],["A sixty-year cycle was based on ....","repetitions of ten- and twelve-year cycles","a doubling of the five elements","zodiac animals","None are correct","A"],["Fill in the blank with the correct words The ethnical Vietnamese is derived from a combination of aboriginal ... peoples with Indonesian and ... peoples from outside the region.","Australoid, Mongoloid","Negroid, Australoid","Negroid, Caucasoid","Caucasoid, Australoid","A"],["Fill in the blank with the correct words: Younger siblings of the father are called ... (for males) and ... (for females).","chu, co","cau, mo","bac, bac","duong, di","A"],["Fill in the blank with the correct words: Dinh Bo Linh named the country ... and set up the capital in Hoa Lu, which is now Ninh Binh. (NHUNG HOÀNG)","Dai Co Viet","Dai Viet","Van Xuan","Nam Viet","A"],["When did catholicism come to Vietnam? (NHUNG HOÀNG)","In the 12 century","In the 16th century","In the 18th century","None are correct","B"],["With which president is the policy of Vietnamization associated?","Eisenhower","Kennedy","Johnson","Nixon","D"],["Who was The infamous South Vietnamese \"first lady\" for controversial comments? (NHUNG HOÀNG)","Madame Nhu","Madame Ky","Madame Diem","Madame Cao","A"],["When did the making of ceramics (gom) in Viet lands truly take off?","The independent monarchies in the 11th and 12th century","The 19th century","The French dominance period","The 1st century B.C.E","A"],["in Vietnam: A. The making of the ceramic could date back to the Palaeolithic times. B. The golden time of ceramics in Vietnam were during the independent monarchies in the 11th and 12th century. C. Ceramic-making in Vietnam truly took off after the French arrived in the 19th century. D. All are correct) When did Viet scholars develop a second writing system (Vernacular characters)? (NHUNG HOÀNG)","The 13th century","The 16th century","The 18th century","The 11th century","A"],["Choose the INCORRECT statement","The Tay Son Uprising first emerged as a peasant movement and later on successfully overthrew all of the corrupted governments Trịnh and Nguyễn.","The country of Vietnam was mostly reunited for the first time after 200 years of division, since the Le-Mac War and later on the Trinh-Nguyen War.","In 1789, The Tay Son army under the leadership of Nguyen Hue decisively smashed the invading army of Mongol Dynasty.","During the era of Tay Son, the battle was fought not only by swords and spears but also by a significant","C"],["Which was the first embryonic State of Vietnam?(NHUNG HOÀNG)","Van Lang","Au Lac","Van Xuan","Dai Ngu","A"],["Choose the CORRECT statement(NHUNG HOÀNG)","Vietnamese is a polysyllabic language","Vietnamese is a tonal language","The Vietnamese alphabet was derived from the cyrillic script.","None are correct","B"],["The festivals were observed by ...","most Vietnamese","the exclusive property of a particular faith","the Government only","None are correct","A"],["What does not belong to the Three Universal Truths in Buddhism?","Everything is impermanent and changing.","Impermanence leads to suffering, making life imperfect.","The self is not personal and unchanging.","All are correct","D"],["What ended French colonial rule in Vietnam?(NHUNG HOÀNG)","The Battle of Dien Bien Phu (1954)","The Battle of Hanoi (1946)","The \"Hanoi-Dien Bien Phu in the air\"","The Tet Offensive","A"],["Which is the first concern of Generation 2000?(NHUNG HOÀNG)","Job-related","Friendship and love","Family","None are correct","A"],["Which was the first Vietnamese language newspaper?(NHUNG HOÀNG)","The Gia Dinh Newspaper","Labour or The Worker","Liberated Saigon","Thanh Nien","A"],["Which factor did not account for the increase of the nuclear, two-generation family since 1975?","Migration from rural areas to cities, from the overpopulated to urbanization and industrialization for finding a job","The desire of a generation to love apart from their parents","The government's family planning policy","The traditional patriarchal influence with the need to have a male heir","D"],["How many seasons are there in vietnam?(NHUNG HOÀNG)","The North of Vietnam has four distinct seasons.","The South of Vietnam has two distinct seasons.","A and B are correct","None of the above","C"],["Fill in the blank with correct words\"Great Proclamation of the Pacification of the Wu\", a masterpiece of Vietnamese literature written in ....(NHUNG HOÀNG)","Chinese","Romanized Script","Vernacular","English","A"],["Which is INCORRECT about \"Wandering Souls\" (According to the concept of the animists)?","The spirits of people who had died far from home, or of those with neglectful descendants, became \"wandering souls\".","\"Wandering Souls\" might harm anyone they encountered.","\"Wandering Souls Day\" is celebrated during the 15th day of the seventh month in the lunar calendar.","None of the above","D"],["Which of the following statements about The Vietnamese Communist Party is CORRECT? (NHUNG HOÀNG)","Be the unification of the three groups Indochinese communists, Annamese communists, and Indochinese communist Union.","Be formed on February 3, 1930 at Hongkong.","Trinh Dinh Cuu and Nguyen Duc Canh represented the Indochinese Communist Party to attend the Founding Conference of the Communist Party of Vietnam.","All are correct","D"],["Which of the following is not the three paths of concentration in Buddhism?","Right Effort","Right Mindfulness","Right Meditation","Right Speech","D"],["When did France first attack Vietnam?(NHUNG HOÀNG)","In 1858","In 1945","In 1954","In 1849","A"],["Who was the editor of the Gia Dinh Bao?(NHUNG HOÀNG)","Truong Vinh Ky","Huynh Tinh Cua","Pham Quynh","Nguyen Khac Hieu","A"],["Which is the best-known work of the early 19th century and today written in 'Nom' characters?","The Tale of Kieu","The Lament of a Royal Concubine","The Complaint of a Warrior's Wife","Compilation of Bach Van's Poems","A"],["Why may wood-block printing be considered a major art form?(NHUNG HOÀNG)","Because of its creativity","Because of the profusion of its production","Due to its unique themes and the treatments","All are correct","D"],["Pre-colonial Viet identified themselves by reference to ... .","two lineages: the internal one of the father and the external one of the mother","only one lineage due to the deep influence of the patriarchal in character","only one lineage due to the deep influence of the matriarchal in character","None of the above","A"],["What is NOT TRUE about Vietnamese Table Manners (NHUNG HOÀNG)","Don't sit and eat before the elders","Do invite people before eating","Do pass and receive everything with both hands when you receive something from the older people","It is not okay for you to use your own chopstick to pick up the food from the shared dish","D"],["Arranged marriages and polygyny abolished by .....","The 1958 Family Law","The Law on Marriage and the Family in 1959","The Law on Marriage and Family in 1986","The Law on Marriage and Family in 2000","B"],["How many major races are there in the world? (NHUNG HOÀNG)","Two","Three","Four","Five","C"],["(Giải thích : White/Caucasoid Negroid (Black) Mongoloid (Asian) Australoid) Which was considered as the manifesto that urged Vietnamese youth to modernize themselves?","Ten Points to Consider","Today","Sunday","Manners","A"],["Choose the NOT TRUE statement about Vietnamese Ceramics under pre-colonial times? (NHUNG HOÀNG)","Vietnamese glazed and unglazed wares are not the only ceramics that can be found in local markets","Vietnamese glazed and unglazed did not compete with stoneware and earthenware produced by the Highlanders or by Cham and Khmer of the central and southern plains","Bat Trang artisans did not have to go far for the primary materials","Japanese use \"Kochi\" to refer to Cochin ceramics including Vietnam","B"],["Which one of the following statements about animism is INCORRECT?","Animism is the belief that nature is enlivened by distinct personalized spirit beings.","Animist peoples not only worship their ancestors, but they also worship rocks, plants, and animals.","Animism is prevalent among people who see themselves as a part of nature rather than dominating it.","Animism is monotheistic","D"],["In practice, the Vietnamese year begins in ...","spring","autumn","summer","winter","A"],["Choose the INCORRECT statement (NHUNG HOÀNG)","Vietnamese is an isolating language.","Vietnamese has also appropriated words from foreign languages, particularly Chinese and, more recently, French and English.","There are two main regional variations in Vietnamese pronunciation.","Viet scholars developed a second writing system from at least the 13th century onward.","C"],["How was traditional black lacquer made at the beginning?","The oxidation of the resin","Burned wood","Artificial color","Ramie leaves","A"],["Fill in the blank with the correct words Three quarters of Viet Nam's territory are made up of .... (NHUNG HOÀNG)","low mountains and hilly regions","rivers and floodplains","grassed savanna","low-lying arable land","A"],["Which was a distilled, purified product and also was one of the traditional offerings to deities and ancestors?(NHUNG HOÀNG)","Rice liquor","Beer","Coffee","Tea","A"],["The meaning of the birth of the Vietnamese Communist Party includes:","Reflecting the combination of class struggle and national struggle in our country in the early years of the twentieth century.","Be the product of the combination of Marxism-Leninism, Ho Chi Minh's thought with the workers' movement, and the patriotic movement of Vietnam.","Be a turning point in the history of the Vietnamese revolution.","All are correct","D"],["Fill in the blank with the correct words: In Which King's reign was the Quoc Tu Giam (Imperial Academy) established?","Le Thanh Tong","Ly Nhan Tong","Ly Thanh Tong","Ly Thai To","B"],["When did the government begin to launch birth control campaigns?","In 1962","In 1959","In 1986","In 1958","A"],["The philosophy of Yin and Yang mainly belongs to the field of:","Cognitive culture","Spiritual culture","Organizational culture","Communication culture","A"],["More instrumental than vocal, it stressed melody above lyrics, although it does include long songs and adapted folk songs sung by professional songstresses\" are the characteristics of(NHUNG HOÀNG)","Ca Tru","Amateur music","Ca Hue","Folk songs","C"],["In which period did Vietnamese writing literature officially appear?","Northern feudal period","Ly- Tran Dynasty","Colonial period of the Ming Dynasty","Hau Le Dynasty","B"],["When did the Renovation literary movement in Vietnam begin?","In 1986","In 1975","In 1954","In 1989","A"],["The ten-year cycle runs as follow: (NHUNG HOÀNG)","Water in Nature, Water in Usage, Fire, Wood in General, Wood Set to Burn, Metal in General, Wrought Metal, Uncultivated Land, Cultivated Land","Water in General, Water in Land, Fire, Wood in General, Wood Set to Burn, Metal in General, Wrought Metal, Uncultivated Land, Cultivated Land","Water in Nature, Water in Usage, Cloud, Wood in General, Wood Set to Burn, Metal in General, Wrought Metal, Uncultivated Stone, Cultivated Stone","Water in General, Water in Land, Fire, Wood in Nature, Wood Set to Burn, Metal in Land, Wrought Metal, Uncultivated Land, Cultivated Stone","A"],["When was the College of Industrial Arts opened?","In 1954","In 1945","In 1958","In 1975","C"],["Which is INCORRECT about Taoist masters? (NHUNG HOÀNG)","Taoist masters serve as healers, mediums, and geomancers.","By Nguyen Times, they were called 'thay', 'father', and by extension, 'teacher' or 'master'.","In modern times, It's hard to distinguish between Animist and Taoist.","None of the above","D"],["Which is INCORRECT about Taoism?","Taoism is a spiritual philosophy that focuses on a person's outlook on life and the world around them.","Originated in China during the struggles preceding the founding of the Qin Empire in 221 B.C.E.","Human beings are not a part of the grand harmony of nature in Taoism.","The Tao Te Ching was originally named for the man credited with, writing it, Laozi.","C"],["Which is INCORRECT about Taoism? (NHUNG HOÀNG)","The Taoist name is taken from Chinese letters which, in other words, the way.","The \"Non-action\" in Taoism means \"doing nothing\".","Taoists believe it's important to trust and recognize our own inner nature, and discover who we are.","All things derive from a combination of the two, with 'am' supplying matter or solidity, and 'duong' subtle principle or spirit.","B"],["Which statement is NOT TRUE about the clan leader (Truong Toc)?","Was responsible for protecting widows and minors as well as the moral anchor for all within the clan","Resided the ancestral home and presided over the family council","The youngest male in the oldest branch indirectly descended from the founding ancestor","Was the one to whom related families or members within each familial unit would try to resolve disputes","C"],["The three classics in the principle of forming Tam Tai (Tam Tài) are:","Father- Mother- Child","Heaven- Earth- Human","Human- Space- Time","Heaven- Earth- Water","B"],["Most people of Vietnam identify with the three major religions of:","Taoism, Buddhism, and Confucianism","Taoism, Buddhism, and Catholic","Taoism, Catholic, and Confucianism","Islamic, Buddhism, and Confucianism","A"],["Until the sixteenth century, Dai Viet had only one city and one political-economic culture (NHUNG HOÀNG)","Hoi An","Pho Hien","Thanh Ha","Thang Long (Ke Cho)","D"],["What originated in the villages of the North and is derived from harvest festivals involving dancing, wrestling, boat races, and other popular amusements?(NHUNG HOÀNG)","Water puppetry","Hat Quan Ho","Cheo","Cai Luong","A"],["Which is not a function of lacquerware in ancient times?","Apply to ceramics and leather","Coat furniture, pottery","Preserve and decorate wooden items","None of the above","A"],["The cultural of Ly- Tran and Hau Le belong to which cultural period?","Anti-Northern culture","Dai Viet Culture","Dai Nam Culture","Modern culture","B"],["Chung sticky rice cake, a traditional cake of the Vietnamese people, symbolizes:(NHUNG HOÀNG)","Earth","Yin and Yang","Moon","Sun","A"],[", the soul of Vietnamese Tet holiday originated from which Hung king? A. The 5th Hung King B. The 6th Hung King C. The 7th Hung King D. The 4th Hung King) When did the observatory cease to function?(NHUNG HOÀNG)","In Tran Dynasty","When Bao Dai abdicated in 1945","In Le Dynasty","None are correct","B"],["How many ethnic groups are there in the Central Highlands cultural region?(073-356-8678)","About more than 30 ethnic groups","About 35 ethnic groups","40 ethnic groups","Nearly 20 ethnic groups","D"],["Choose the INCORRECT statement about Woodblock printing during Pre-colonial Times","The themes are mutable, springing from familiar rural surroundings as well as from mythological and historical sources.","The themes carry a symbolism meant to convey wishes of prosperity, happiness, and longevity.","The themes are varied from mythological and historical sources.","The themes carry a symbolism meant to impart moral, historical, or religious lessons, or to satirize.","A"],["What was the golden age of Buddhism in Vietnam?(NHUNG HOÀNG)","From the Le So to the Tay Son","From the Nguyen dynasty up to now","From the beginning of AD to the end of the Northern domination period","Dinh, Tien Le, Ly, Tran dynasties","D"],["In which locality is Bat Trang pottery village?(NHUNG HOÀNG)","Vinh Phuc","Ha Noi","Ninh Binh","Bac Ninh","B"],["Which forced all of the artistic world out of their inner world and into the chaotic and deadly world of the war?(NHUNG HOÀNG)","The First Indochina War","The Second Indochina War","First Era of Northern Domination","None of the above","A"],["Which referred to the nrthern part of the country and comes from the sino-Vietnamese 'Dong Kinh'","Tonkin","Annam","Cochinchine","None of the above","A"],["During Hau Le Dynasty, which of the following could not go to school or take exams?","The children of the family work as singers.","Children of poor families","Children of merchant families","Children of tenant families","A"],["Who was not a member of the Self-Reliance Literary Group?","Thach Lam","Tu Mo","The Lu","None of the above","D"],["In which year was Quan Ho Bac Ninh recognized by UNESCO as an intangible cultural Heritage of Humanity(NHUNG HOÀNG)","2006","2010","2009","2008","C"],["Choose the INCORRECT statement about Renovation Literature","Nguyen Huy Thiep and Le Minh Khue were two major Renovation writers who did not have a military background","Party's Sixth Congress allowed some writers to experiment with new themes and styles and to address a number of formerly taboo topics","Le Luu was one of the famous Renovation authors with the masterpiece named \"Thoi Xa Vang\"","In the Party's Seven Congress, there was a reassertion of the Party's authority over literary matters and a restatement of writers' obligations","A"],["What was not included in the \"three subserviences\" (tam tong) that every woman. in the Pre-colonial Times had to obey?(NHUNG HOÀNG)","obey her father before marriage","obey her husband once married","after her husband dies, obey her son","obey her mother before marriage","D"],["Which is not involved in the fundamental values and customs embedded in the Vietnamese ethos?","Filial piety","Merit","Moral debt or gratitude","Intelligence","D"],["Which cultural region has a long tradition and is the cradle of Vietnamese culture and civilization? (NHUNG HOÀNG)","Trung Bo Central cultural region","Bac Bo Northern cultural region","Nam Bo Southern cultural region","Viet Bac cultural region","B"],["Choose the CORRECT statement","Vietnamese artists' works are mere imitations of European masters","Vietnamese artists are incapable of genuine creativity and lack any original aesthetics","The art and architecture of Vietnam have been strongly affected by the colonial era","Pre-colonial Viet art found its expression in bronze casting, stone and wood sculpture, block-printing, pottery, lacquer work, and architecture","C"],["Choose the NOT TRUE statement about Vietnamese Drinks Culture during pre-colonial times (NHUNG HOÀNG)","The Viet elite did not generally participate in an elaborate ceremony comparable to that of the Japanese.","The Viet elite connoisseur very place the same emphasis on the myriad varieties of luxury teas like their counterparts in China.","The Viet elite did develop an institutionalized practice of tea consumption.","Tea and other nonalcoholic beverages were served after meals.","B"],["Fill in the blank with the correct words: ... was developed by adopting and adapting some of the symbols of Chinese characters to express Vietnamese-language sounds.","Classical Chinese","The Latin alphabet","'Chu Nom'","'Chu Quoc Ngu'","C"],["Fill in the blank with correct words Confucianism derives from the thought of...","Kongzi","Zunzi","Laozi","Zhuangzi","A"],["Which is not involved in the characteristics of Renovation Literature?","A \"high degree of criticism of everyday reality\"","Focus on the individual rather than the collective experience","Devious treatment of the \"decline of traditional morality\"","A \"willingness to take a fresh look at important issues in the past\".","C"],["What is the greatest achievement in the prehistoric culture period of the inhabitant of Southeast Asia (NHUNG HOÀNG)","The formation of wet-rice agriculture.","The formation of pottery.","The formation of handicrafts.","All are incorrect","A"],["The East (culture) is a region that includes which continents? (NHUNG HOÀNG)","Asia, Europe, Australia","Asia, Europe, Africa","Asia, Australia, Africa","Asia, Europe, America","C"],["The script of a water puppet performance often celebrates what?","Hard labor","The village","The family","Hard labor, The village, The family","D"],["Formerly, Vietnamese people often had a custom when encountering a severe illness or unconsciousness","Burning incense to pray for help from the spirits","Invoking the soul","Burning the effigy,","Calling upon the spirits","B"],["Which was the reason for the blackening of the teeth with lacquer customs?","Since Betel chewing stained the teeth unevenly in a way that was considered unattractive","Since they were forced to obey by the government","Since they felt uncomfortable with white teeth","None of the above","A"],["The scale of schools in villages established by Vietnamese Confucian scholars has been since when?","Đinh dynasty","The time of Early Le dynasty","Ly dynasty","Tran dynasty","C"],["The main space for traditional Vietnamese water puppetry is","Stream","Lake & Pond","River","Sea","B"],["Which genre of music below has lyrics derived from poems?","Hat Quan Ho","Ly","Ho","Cheo","A"],["Choose the INCORRECT statement(NHUNG HOÀNG)","Drying was likewise commonly used to preserve shrimp and squid.","Drying was likewise commonly used to preserve crabs.","The most widely used sauce in Vietnam is fish sauce (nuoc mam).","There are many kinds of fishes can be used to make fish sauce.","B"],["How many vowels are there in Vietnamese?","12","11","10","9","A"],["How many kilometres of coastline does Vietnam have?","3,260 km","1,360 km","2,960 km","3,560 km","A"],["Hoang Sa, and Truong Sa belong to","Vietnam","Philippines","China","Brunei","A"],["Fill in the blank with the correct words ... was used by officials of the Chinese Tang Dynasty, which colonized Vietnam from the seventh century until the tenth.","Annam","Vietnam","Dai Co Viet","Nam Viet","A"],["Which referred to the South and comes from 'Giao Chi', an ancient Sino-Vietnamese administrative term for part of today's northern Vietnam?","Tonkin","Annam","Cochinchine","None of the above","C"],["Choose the INCORRECT statemen about Vietnamese name","The order of Vietnamese names is different than in the west.","Common middle names are often gender-specific, such as Thi for females.","Nguyen, Tran, and Le are the three most popular family name in Vietnam.","None of the above","D"],["What is the name of the highest mountain in Vietnam?","Fansipan","Phu Si Lung","Phu Xai Lai Leng","Ba Den","A"],["What is the name of the longest mountain range in Vietnam?","Annamite Range","Hoang Lien Son Mountain Range","Bach Ma Range","Hai Van Mountain Range","A"],["Which is the Easternmost Point of Vietnam?","Mui Doi","A Pa Chai","Lung Cu","Ca Mau","A"],["What are 3 interesting facts about Vietnam?","Vietnam is an S-shaped country.","There is always Ong Tao in the corner of every typical Vietnamese family","Vietnam is home to water puppetry","All are correct","D"],["What are the prominent features of Southern geography?","Bazan red soil","Mostly mountains","Interlaced canal system","Dangerous high mountains","C"],["To determine the research object of the Vietnamese cultural, which method do culturists use?","Historical method","Logical method","Logical method combined with historical method","Analytical methods","C"],["Which of the following is not a characteristic of agrarian culture?","Humans have always had the ambition to conquer nature.","People respect relationships.","Flexible lifestyle, easily adapts to any situation.","Humans have a sense of respect and desire to live in harmony with nature.","A"],["The two dominant features of traditional Vietnamese culture are:","Tropical and monsoon","Tropical and humidity","Abundance of animals and plants","Interlaced rivers and rich flora","D"],["The main population in Viet Bac is: (NHUNG HOÀNG)","Dao, H'mong, Lo Lo, San Chay","Kinh","Thai- H'mong","Tay- Nung","D"],["Topography of Vietnam from a geographical-cultural perspective:","The length is from North to South, the width is from West to East, mountains and forests account for 2/3 of the area, plains account for 1/3 of the area, rivers are abundant and evenly distributed throughout.","The length is from North to South","Mountains and forests account for 2/3 of the area","The width is from West to East","A"],["Area to store and preserve traditional cultural values imbued with Vietnamese cultural identity is: (NHUNG HOÀNG)","Family","Rural area","Urban area","Nation","B"],["Protestantism is a religion separated from which religion?","Buddhism","Taoism","Catholicism","Confucianism","C"],["Which of the following statements about The Era of Northern Domination is INCORRECT?","The Era of Northern Domination can be divided into 4 periods.","The First Era of Northern Domination was from 111 BC-40 AD.","The Second Era of Northern Domination was from the 1st century to the 6th century AD.","The Fourth Era of Northern Domination was from 602 to 905.","D"],["Which of the following statements about Vietnam under Northern Domination is INCORRECT?","During the Chinese domination, on the basis of exposure to Chinese culture, the Vietnamese people had created their own cultural identity.","Local customs were suppressed, and Chinese customs, rites, and institutions were imposed by force.","The process of ethnic Sinicization Vietnam never succeed.","None of the above","D"],["\"I am not afraid of war, but I fear that the people's heart are not with us\" is the famous saying of ... .","Ho Nguyen Trung","Ngo Si Lien","Tran Quoc Tuan","Nguyen Trung Truc","A"],["Who is the ancestor of cannon casting in Vietnam?","Ho Nguyen Trung","Ngo Si Lien","Tran Quoc Tuan","Nguyen Trung Truc","A"],["Which of the following statement about The Trinh-Nguyen Civil War is INCORRECT?","It was a 17th century lengthy civil war waged between the two ruling families in Vietnam.","Both of two rulers were referred to by their people as Lord and controlled their countries while the Later Le emperors did not have any real power, only maintained their title.","During the Civil War, Vietnam was divided into two countries: Dang Trong (South) and Dang Ngoai (North) with the Gianh River as frontier line.","None of the above","D"],["Who was the last reigning emperor of Vietnam?","Bao Dai","Ham Nghi","Gia Long","Hiep Hoa","A"],["The history of Vietnam during the northern feudal period is the history of the struggle for what purpose?","Persistent resistance to preserve the race liberate the country","Protect the national culture","Liberate the country","All are correct","D"],["Indigenous culture stage was formed through two periods. What are they?","The period of prehistoric culture and the period of Van Lang - Au Lac culture.","The period of prehistoric culture and the period of northern feudal culture","The period of Van Lang - Au Lac culture and The period of northern feudal culture","All are incorrect","A"],["Some other special achievements of ancient Southeast Asia:","Cultivation of mulberries to raise silkworms for clothing and tea drinking","The domestication of some specific animals such as buffaloes and chickens","Making houses on stilts to live in and using medicinal plants to cure diseases","All are correct","D"],["Lac Viet people are part of which group?","North- Asia and Bach Viet","South-Asia and Bach Viet.","South-Asia and Dai Viet.","North-Asia and Nam Viet.","B"],["The third millennium BC corresponds to which period?","Stone Age","Bronze Age","Iron Age","Age of metallurgy","B"],["The cultural exchange with China and the rest of the region was formed in two periods. They are:(073-356-8678)","The period of Dai Nam culture and the period of Modern culture","The period of Van Lang - Au Lac culture and The period of Northern Feudal culture","The period of anti-North colonial culture and the period of Dai Viet culture","All are incorrect","C"],["The cultural exchange with the West was formed in two periods. They are:","The period of Dai Nam culture and the period of Modern culture","The period of Van Lang - Au Lac culture and The period of Northern Feudal culture","The period of anti-North colonial culture and the period of Dai Viet culture","All are incorrect","A"],["What period did the name Dai Nam come from?","Nguyen Dynasty - Gia Long period","Nguyen Dynasty - Tu Duc period","Nguyen Dynasty - Minh Mang period","All are incorrect","C"],["The common feature of cultural exchanges with China and the region is the parallel existence of two opposing trends. They are:","On the one hand is the tendency to be influenced by Han culture and on the other side is the tendency to anti-Han and Vietnamize Chinese influences.","On the one hand is the tendency to be influenced by Han culture and on the other side is the tendency to anti-Han.","On the one hand is the tendency to be influenced by Han culture and the other side is Vietnamize Chinese influences.","All are incorrect","A"],["The cultural period of the anti-Northern colonial period started in BC and lasted until Ngo Quyen regained the country. The main features of this cultural period are:","Consciousness of indomitable and permanent resistance to the threat of invasion from Northern feudalism, the decline of Van Lang - Au Lac civilization and the opening the process of exchange and reception of Chinese and regional cultures","Consciousness of indomitable and permanent resistance to the threat of invasion from Northern feudalism and the flourishing of Van Lang - Au Lac civilization","The deliberate destruction of the northern invaders with a malicious assimilation scheme and the regular natural degradation of a culture after reaching its peak","All are correct","A"],["What are the characteristics of Dai Nam culture?","For the first time, our country achieved unification in terms of territory and administrative organization from Dong Van to Ca Mau.","After the chaotic period Le-Mac, Trinh-Nguyen, came to the Nguyen Dynasty. Confucianism was restored as the state religion, but it gradually declined.","The beginning of the process of penetration of Western culture, is also the beginning of the period when Vietnamese culture integrates into human culture.","All are correct","D"],["What are the characteristics of Dong Son culture?","Traveling by water transport","The beliefs of fertility, worship of nature, worship of ancestors and heroes.","Cultural exchange between tribes.","All are correct","D"],["Dai Viet period became the second highest peak in Vietnamese cultural history with two milestones:","Ly- Tran Dynasty and Hau Le Dynasty","Ly Dynasty and Tran Dynasty","Le Dynasty and Nguyen Dynasty","All are incorrect","A"],["Which of the following is of international significance?","Van hoa","Van minh","Van hien","Van vat","B"],["What race of people were the inhabitants of ancient Southeast Asia?","Indonésien","Austroasiatic","Austronésien","Australoid","A"],["Specific product of Dong Nai culture is:","Beast head earrings (khuyen tai dau thu)","Terracotta Jar coffin (mo chum gom)","Gold jewelry","Stone musical instrument","D"],["In what period was Confucianism brought up as the state religion in Vietnam?","Dinh - Le Dynasty","Ly - Tran Dynasty","Hau Le Dynasty","Nguyen Dynasty","C"],["Dai Viet was named by the king of which dynasty?","Ly Dynasty","Tran Dynasty","Le Dynasty","Dinh Dynasty","A"],["Regarding the characteristics of traditional Vietnamese urban organizations, which of the following statements is not true?","Cities are created by the state, mainly performing administrative functions.","The city is influenced by the countryside and has a strong rural character.","Cities formed spontaneously.","Cities are always at risk of being rural.","C"],["The basic principles that assemble human beings into society, making them social creatures are:","Same location","Same origin","Same benefits.","All are correct","D"],["Which culture plays a decisive role in establishing Vietnamese cultural identity?","Son Vi culture","Hoa Binh culture","Dong Son culture","Sa Huynh culture","C"],["In what period was the Thang Long citadel divided into 36 wards?","Ly- Tran Dynasty","Hau Le Dynasty","Nguyen Dynasty","Tien Le Dynasty","B"],["Which of the following statements is correct?","The process of formation and development of Dong Son culture in the North is the process of forming the core of the ancient Viet people and the first state of the ancient Viet people.","The process of formation and development of Dong Son culture in the South is the process of forming the core of the ancient Viet people and the first state of the ancient Viet people.","The process of formation and development of Hoa Binh culture in the North is the process of forming the core of the ancient Viet people and the first state of the ancient Viet people.","The process of formation and development of Nui Do culture in the North is the process of forming the core of the ancient Viet people and the first state of the ancient Viet people.","A"],["During the Le Dynasty, Thang Long citadel was divided into how many wards?","61","36","31","63","B"],["Confucianism is: (NHUNG HOÀNG)","An economic theory","A moral political doctrine","An ideology only for the unorthodox feudal state.","A philosophical doctrine","B"],["In which year did the exam system in Chinese characters end in Tonkin?","1918","1917","1916","1915","D"],["Which century marked the end of Confucianism? (NHUNG HOÀNG)","XVI","XVII","XVIII","XIX","D"],["Which of the following religions arose from the South?","Cao Dai, Taoism, Buddhism","Protestantism, Hoa Hao","Cao Dai, Hoa Hao","All are incorrect","C"],["The meaning of fertility beliefs is: (NHUNG HOÀNG)","Wishing all good luck and abundance throughout the year.","Doing magic for a bountiful harvest.","Wishing to have many children.","Wishing a bountiful harvest and having many children.","D"],["During which cultural period were the currents of bourgeois democracy and Marxist-Leninist ideology transmitted to Vietnam? (NHUNG HOÀNG)","Culture of the Northern feudal period","Culture of Dai Viet period","Culture of Dai Nam period","Culture of Modern period","C"],["The owners of the Oc Eo culture are:","Residents speak Tay- Thai language","Residents speak Mon- Khome language","Residents speak Han- Tang language","Residents speak Nam Dao language","D"],["The characteristics of Dong Nai culture are:","Farming and crafts.","Typical cultural achievements: Rock musical instruments (Dan da)","Popular occupations: growing rice on land, farming, hunting","All are correct","D"],["The Hong Duc law marks an important development in the history of the rule of law in Vietnam. When was this law enacted?","Ly Dynasty","Tran Dynasty","Hau Le Dynasty","Nguyen Dynasty","C"],["The main production field of Viet Co people is:","Agriculture- Planting crops","Traditional crafts: bronze casting, pottery, stone carving, wood carving, knitting...","Growing rice agriculture.","Raising livestock and poultry","C"],["What was the main purpose of the French to maintain the organization of villages and communes (the basic social structure) when they invaded our country?","As a place to teach Vietnamese to the French.","Easy to control residents.","Local agricultural development.","Using the feudal apparatus to do jobs for the colonial government.","D"],["Champa culture belongs to which cultural region? (NHUNG HOÀNG)","Bac Bo- The North","Trung Bo- The Central","Viet Bac","Tay Bac- The Northwest","B"],["Which culture plays the role of the original culture of the Southern region?","Champa","Oc Eo","Sa Huynh","Dong Son","B"],["Confucianism was formed in which country?","Thailand","India","China","Vietnam","C"],["The main feature in the life of Champa kings is:","Vishnu religion","Shiva religion","Brahma religion","Buddhism","B"],["Which king of the Nguyen Dynasty chose Hue as the capital instead of Thang Long?","Gia Long","Minh Mang","Thieu Tri","Tu Duc","A"],["In which year was Thang Long Imperial Citadel built? (NHUNG HOÀNG)","1010","1070","1011","1007","A"],["Dong Son bronze drum is the achievement of which cultural period?","Prehistoric","Van Lang- Au Lac","The Northern feudal","Dai Viet","B"],["During the reign of the Hung Kings, where was the capital of Van Lang state located?","Co Loa","Phong Chau","Me Linh","Van An","B"],["In 1075, the court of King Ly Nhan Tong organized the first exam to select talented people to be mandarins. The first place winner in that exam is:","Le Van Huu","Chu Van An","Le Van Thinh","Nguyen Hien","C"],["Which cultural feature does not belong to the period from 1858 to 1945?","Forced contact and cultural interference between Vietnam and France.","The development to the pinnacle of Chinese literature.","Natural cultural exchange between Vietnam and the East-West world.","Journalism was born and developed.","B"],["The Nguyen Dynasty located the capital in: (NHUNG HOÀNG)","Hue","Nghe An","Ha Noi","Quang Nam","A"],["What image is the traditional symbol of autonomy in Vietnamese villages?","Bamboo","Village communal courtyard","Banyan Tree","Rive","A"],["\"The Northern feudal period\" is named for which period by historians?","1407- 1427","XV- XIX","I- X","500 years BC","C"],["What occupations were Thuy Chuong and Nghi Tam wards famous for in the Le dynasty?","Paper making","Pottery making","Bronze casting","Fabric and silk weaving","D"],["Popular housing type of residents of Dong Son culture is:","House on a boat","House on land","House on raft","Stilt house","D"],["Which is INCORRECT about Animism under pre-colonial times?","Based on the merits, the court ordained the gods of the Citadel according to levels.","The imperial states regulated Animistic practices to legitimize imperial rule and prevent 'ta giao' (\"heterodox teaching\") from corrupting morals and promoting rebellion.","Each village has had a 'dinh', or communal house, used for council meetings and rituals honoring the 'than hoang', the village's patron deity.","None of the above","D"],["Which one of the following statements about the Yin Yang Symbol in Taoism is INCORRECT? (NHUNG HOÀNG)","The dots in the Yin Yang symbol indicate that there is no absolute yin or yang, each contains the germ of the other.","The outer circle indicates that all things are made up of yin and yang.","The duality of yin and yang is an indivisible whole.","Yang refers to negative/passive/female principles in nature.","D"],["Who founded Buddhism? (NHUNG HOÀNG)","Siddhartha Gautama","Shakyamuni","The \"Buddha\"","All are correct","D"],["The Basic Teachings of Buddha which are core to Buddhism are","The Three Universal Truths","The Four Noble Truths","The Noble Eightfold Path","All are correct","D"],["Which of the following are beliefs of Buddhism? (1) Life is suffering (2) People suffer on account of desire. (3) If desires are conquered, nirvana will be attained. (4) Desire can be removed by following the eight-fold path.","(1), (2), and (3)","(1) and (2)","(2) and (3)","(1), (2), (3), and (4)","D"],["When was Buddhism first introduced to Vietnam (came from China)? (073-356-8678)","In the 1st century C.E","In the Ly dynasty (11 century)","In about 500 B.C.E","In the 7th century","A"],["Who is regarded as the first Vietnamese patriarch of Zen Buddhism in Vietnam?","Khuong Tang Hoi","Le Dinh Tham","Master Khanh Hoa","Thich Tri Thu","A"],["Three Virtues every Vietnamese Buddhist Youth Association member and leader are advised to follow:","Compassion","Wisdom","Bravery","All are correct","D"],["Which of the following statements is not true about Confucianism?","Be a system of thought and behavior originating in ancient China.","Confucianism is not a religion that is based upon the belief in a personalized God.","Confucianism concerns the issues of gods, spirits, and death.","Confucianism emphasizes the feeling of piety.","C"],["Which belong to the Five Relationships of Confucianism? (1) father-son (2) husband-wife (3) ruler-subject (4) friend-friend (5) grandparents-nephew/niece","(1), (2), (3), and (4)","(1), (2), and (4)","(2), (3), (4), and (5)","(1), (3), (4), and (5)","A"],["Which of the following statements about Confucianism in Vietnam is CORRECT?","Confucianism was introduced into Vietnam early during Chinese rule and has maintained its influence since that time.","In 1075, the first Confucian exam was opened with the names \"Confucian Studies\" and \"Three Schools of Confucianism\", officially giving birth to the long history of Confucian examinations in Vietnam.","The idea of territorial sovereignty identified in Ly Thuong Kiet's Nam Quoc Son Ha is considered to be influenced by Confucian thought.","All are correct","D"],["Which is NOT included in The Seven Sacraments? (NHUNG HOÀNG)","Baptism","Eucharist","Reconciliation","Recognition","D"],["Which of the following statements about Catholicism in Vietnam is INCORRECT?","The Catholic Church flourished under the colonialists' patronage, opening missions, schools, and hospitals all over the country, and becoming Vietnam's largest landowner.","Vietnamese Catholics were favored above their compatriots and became an educated elite under French Domination.","Under King Minh Mang, Catholicism flourished.","After reunification, the communists placed restrictions on the Catholic Church and imprisoned several of its leaders who had actively opposed the new government.","C"],["Who created Cao Dai?","Ngo Van Chieu","Vietnamese Catholics were favored above their compatriots and became an educated elite under French Domination.","Ngo Dinh Nhu","Ngo Van Vo","A"],["Who does Caodaism worship?","God the Father","Holy Mother","The Divine Beings","All are correct","D"],["When was Caodaism officially established?","In 1919","In 1926","In 1924","In 1950","B"],["Which of the following statement about Hoa Hao Buddhism is INCORRECT?","It was founded in 1939","A Hoa Hao Buddhist practicing Buddhism for self-improvement must, first of all, do his best to comply with the Four Great Debts Of Gratitude.","Hoa Hao was a powerful independent force in South Vietnamese politics until the final victory of the communists in 1975.","Hoa Hao followers are required to shave their heads and take refuge in pagodas.","D"],["There are 4 holy animals known as Vietnamese cultural symbols. They are:","Dragons, Turtles, Phoenix, Unicorn","Dragons, Tigers, Phoenix, Unicorn","Dragons, Turtles, Phoenix, Lions","All are correct","A"],["The founder of Buddhism is: (NHUNG HOÀNG)","Mạnh Tử","Khổng Tử","Lão Tử","Siddhartha Gautama","D"],["Temples in Vietnam are places to worship:","Heroes with meritorious services to the country","Buddha","Gods","All are correct","D"],["The quartet of Dragon, Unicorn, Turtles, Phoenix are commonly used in traditional painting and sculpture with many profound meanings. In it, the image of the Unicorn means:","Symbol the wish for peace.","Symbol of power","Symbol of long life","Symbol of happiness","A"],["In Vietnamese history, the religion that served as the basis for great national unity was:","Taoism","Buddhism","Confucianism","Catholicism","B"],["In Vietnamese history, which religion was once associated with patriotism?","Christianity","Buddhism","Taoism","Hinduism","B"],["The most popular belief in Vietnam is:","Worshiping the Earth god","Worshiping Thanh Hoang god","Fertility","Worshiping ancestors","D"],["In traditional Vietnamese society, which profession is most respected and tops the list of occupations in society?","Scholar","Farmer","Craftsman","Businessman","A"],["In which country did Taoism originate?","Thailand","India","Vietnam","China","D"],["Similarities between religion and belief are:","Massive ideology","Belief in things that are invisible and have the function of regulating society.","Well- organized and taught by education.","There are heads, believers, praying at the synagogue.","B"],["How many categories may Vietnamese Literature be separated into?","2","3","4","5","B"],["Which does not belong to Vietnamese Literature Categories?","Written in Chinese characters","Written in Vernacular characters","Written in Egyptian hieroglyphs","Written in Romanized Script","C"],["Choose the NOT TRUE statement The Folk Tradition (NHUNG HOÀNG)","The main purpose of folklore is to convey a moral lesson and present useful information and daily life lessons in an easy way for the common people to understand.","The origins of the folk tradition cannot be precisely dated.","The folk literature is always recorded in writing and passed from one generation to the next.","The Intelligent buffalo' is an example of Folktale.","C"],["Choose the CORRECT statement","'Collected Poems in the National Language' was written in Vernacular characters.","The Vernacular characters were developed based on Latin characters.","'Nom' prevented authors from producing works that drew upon the popular traditions.","None of the above","A"],["Which was the work not written in Vernacular characters?","\"Compilation of Bach Van's Poems\" by Nguyen Binh Khiem","\"Lament of a Warrior's Wife\" by Dang Tran Con","\"Lament of a Royal Concubine\" by Nguyen Gia Thieu","\"Doctor Pig\" and \"Doctor Quynh\" by Ho Xuan Huong","B"],["When was the golden age for 'chu Nom'?","18th century","16th century","15th century","19th century","A"],["When was 'chu Nom' set as the official writing system","The Ho Dynasty","The Later Le Dynasty","The Nguyen Dynasty","The Tran Dynasty","A"],["Which was a left-wing literary association in Tonkin during the 1930s?","Nam Phong","The Gia Dinh Newspaper","The Self-Reliance Literary Group","League of Light","C"],["Who was the Director of the Self-Reliance Literary Group?","Khai Hung","Nhat Linh","Hoang Dao","The Lu","B"],["Who was not a realist writer in Vietnam literature? (NHUNG HOÀNG)","Nguyen Cong Hoan","Vu Trong Phung","Ngo Tat To","Nhat Linh","D"],["Which of the following statement about Realist Author was INCORRECT?","Be influenced by Marxist ideas of class struggle, anti-imperialism, and anti-feudalism.","Many of them was from the lower levels of the new urban and rural classes.","Chose to depict everyday and banal activities and experiences.","Focus on middle-and-upper-class characters","D"],["Who was not the \"Third Generation\" of Resistance Literature?","Nguyen Minh Chau","Anh Duc","Chu Van","Dao Vu","D"],["What kind of tree represents the solidarity of the power of Vietnamese people?","Bamboo","Lotus","Chrysanthemum","All are correct","A"],["The poem book \"Farewell to the Beloved\" (Tiễn Dặn Người Yêu) is the product of which ethnic group?","Muong","Dao","Thai","Tay","C"],["Which contributed to Vietnam's food culture? (NHUNG HOÀNG)","Crossroads of cultures and religions","The Mongol invasion during the thirteenth century","The contact with the Indianized cultures of the Cham, the Khmer, the Thai, and the Malay peoples","All are correct","D"],["When did many Vietnamese, particularly members of the urban elite, developed a passion for French coffee, bread, butter, ice cream, and pastries?","During the nearly 100 years of French colonization (1862-1954)","From the period of Chinese domination","Since the early 1400s","None of the above","A"],["Choose the TRUE statement about Utensils and Manners of Vietnam under Pre-colonial Times","Vietnamese cooking equipment and eating utensils have not changed little compared to pre-colonial times","Refrigeration and frozen foods were popular","Gas was the preferred fuel","Cooking methods included grilling, baking, boiling, and steaming","D"],["In pre-colonial and particularly in colonial-era Vietnam, which is the second most important grain used in the daily meal?","Rice","Corn","Buckwheat","Oats","B"],["Which is usually used in soups and as a main dish, often to replace meat or fish in vegetarian cuisine?","Curdled soy","Shallots","Garlic","Ginger","A"],["How can it be called the best quality fish sauce ('thuong hang')","It is deep amber in color with a pungent, salty taste.","It is a light color, weak salty taste.","It is made from big anchovies.","There's no such thing as superior","A"],["Which was the main beverage during pre-colonial times? (NHUNG HOÀNG)","Tea","Coffee","Beer","Liquor","A"],["Which liquor was imported from China?","Ruou Cao Luong","Ruou Sen","Ruou Tiet De","Ruou Nep","A"],["Which present marital fidelity and happiness?","The betel vine leaves and Areca Nuts","The betel vine leaves and opium","Tabacco and opium","Areca Nuts and Tabacco","A"],["The definition of a beautiful woman in eighteenth-century Vietnam","Having \"rosy cheeks and black teeth\"","Having \"rosy cheeks and white teeth\"","Having \"round-face, white skin and white teeth\"","Having \"Vline-face and white teeth\"","A"],["Why shouldn't we knock the chopsticks to the bowl according to the Vietnamese' perspective?","Since it seems to invite ghosts or wandering spirits to the home","Because the knocking reminds of a popular song","Since the bowl in Vietnam is very fragile compared to the other countries, knocking like that will make the bowl break even just with a little force","None of the above","A"],["Fill in the blank with the correct word \"Under the influence of Buddhism's teachings on abstaining from taking the lives of sentient beings, many pre-colonial Vietnamese practiced ... at least part of time\"","Vegetarianism","Carnivorous","Meatatarianism","None of the above","A"],["What are the traditional foods in Vietnam? (NHUNG HOÀNG)","Pho Noodle","Banh mi Vietnam","Spring Roll","All are correct","D"],["At the 2 ends of Cau Pagoda - Hoi An, which 2 animals are carved?","Buffalo and Monkey","Rooster and Buffalo","Dog and Rooster","Dog and Monkey","D"],["Which words can describe the Family in Vietnam nowadays?","Tradition","Modernity","Both capitalism and socialism","All are correct","D"],["In pre-colonial times, the Viet was defined first and foremost by ...","their families, which were fundamentally patrilineal and patriarchal in character.","their families, which were fundamentally matrilineal and matriarchal in character.","his or her own traits and career","None of the above","A"],["Who was considered as the clan leader?","The eldest male in the oldest branch directly descended from the founding ancestor","The eldest female in the oldest branch directly descended from the founding ancestor","The youngest male in the oldest branch directly descended from the founding ancestor","The eldest male in any branch descended from the founding ancestor","A"],["Which statement is NOT TRUE about the Family Head?","The family head ruled over all family members in all matters, including property rights, education, marriage, and profession","The family head spoke on the family behalf in dealings with the outside world","The family head had the power to reward or to chastise everyone in the family","The family head ruled over all family members in limited matters, including property rights, education, marriage, but profession","D"],["How many fundamental values and customs are embedded in the Vietnamese ethos?","2","3","4","5","B"],["Choose the NOT TRUE statement about the Vietnamese Family in Pre-colonial Times","Filial piety was the most heavily stressed value, encompassed the duties and obligations of children toward their parents.","Filial piety bound the son or daughter in an unbreakable parental relationship because of the moral debt or gratitude that he or she owed and that could never be fully repaid.","Vietnamese were taught from birth about the sacrifices of their parents and ancestors in order for them to get today results.","All are correct","D"],["Which is NOT TRUE about the Vietnamese marriage in Pre-colonial Times?","Most the marriage match was arranged by a go-between","A go-between was usually a young woman known for her large relationship and her beauty","The concordance of the families was considered extremely important","The virtuousness and accomplished domesticity of the girl was one of the elements to ascertain the prospective bride","B"],["How many stages are there in the process of marriage in Pre-colonial Times?","2","5","3","4","C"],["Which stage below was not included in the marriage process under Pre-colonial Times? (NHUNG HOÀNG)","The preliminary discussions","The betrothal","The Wedding","The Bachelor Party","D"],["What authorities did a mother-in-law not have over her daughter-in-law during the Pre-colonial Times?","Force her daughter in law to work her to the bone from dawn to dusk","Starve her to death","Beat her black and blue","None of the above","D"],["Choose the NOT TRUE statement about the Vietnamese marriage in Pre-colonial Times (NHUNG HOÀNG)","Divorced existed but was rare, as it brought dishonor to the divorced woman and a taint of scandal to the family","Men permitted to take several wives","Secondary wives were obligated to obey the first wife in all things","The first wife was not allowed to participate in the selection of secondary wives","D"],["Which was not a reason for parents to give their children coarse nicknames such as \"pig\", \"dog\", or \"stupid\" in Pre-colonial Times?","They fear that their children would be taken away or rendered mortally ill by evil spirits","These nicknames were supposed to make their children undesirable in the eyes of the spirits","These nicknames were considered as 'hot' and 'beautiful' names at that time","None of the above","C"],["Which is not included in the \"three assumptions of duty\" policy 1965?","Production","Family","Military work","Education","D"],["Which is NOT TRUE about the policies that were applied to persuade the woman to use birth control in 1962? (NHUNG HOÀNG)","Advocated the use of the IUD (Intrauterine Device)","Positive incentives","Negative incentives","None of the above","D"],["Which is included in Positive incentives which were applied to persuade the woman to use birth control in 1962?","Work promotion","Maternity and nursery care","Allocation of living space","Suppression of the above answers","D"],["Choose the TRUE statement about Family Life in the SRV","The onerous tradition of lam dau is no longer tolerated","The young bride still was forced to live with her mother-in-law","When the young bride does live with her mother-in-law, she was still forced to submit to the will and whims her.","None of the above","A"],["Which is considered as proof of filial impiety in the pre-colonial time?","Celibacy","Early marriage","Obey parents","Learn about the sacrifices of their ancestors","A"],["What are some characteristic features of Vietnamese culture?","Ancestor veneration and worship","Respect for community and family values","Manual labor religious belief","All are correct","D"],["In the production culture of the Vietnamese people, the basic unit of production is: (NHUNG HOÀNG)","Individual","Village","society","Small family","D"],["Which of the following family structures is called a nuclear family?","Families with 3 or more generations.","Parents and eldest son's family.","Parents and immature children.","Father or mother and children.","C"],["The Vietnamese woman's Ao Dai is the product of:","Combination of traditional culture and western culture.","The absorption of western culture","The acquisition of traditional culture","The absorption of Chinese culture","A"],["The first and foremost socializing environment of each individual is: (073-356-8678)","School","Member group","Family","Mass Information","C"],["The agricultural region of Southeast Asia is referred to by many Western scholars as: (NHUNG HOÀNG)","Matriarchy","Patrilineality","All are correct","","A"],["How many strings does the \"Senh tien\" have?(NHUNG HOÀNG)","1","2","4","None are correct","D"],["The entirety of Buddhist doctrine is reflected through where?","Sutra Pitaka","Vinaya Pitaka","Commentary Pitaka","All three above","D"],["Fill in the blank: From the early Bronze Age to the early Iron Age, culminating in the famous ... foundation the beginning of the first millennium BC.","Van hoá Đông Sơn.","Van hoa Oc eo","Van hoa Phu Nam","Van hoa Champa","A"],["Fill in the blank The themes in the performances / content of traditional Vietnamese water puppetry, beyond...., and..., also reflect the secular beliefs of the local culture.","Confucianism","Buddhism","Taoism","Confucianism, Buddhism, and Taoism","D"],["The legend of Man Nuong and the monk Khau Da La is associated with which temple below?","Dau Pagoda, Bac Ninh","Tam Chuc Pagoda, Ha Nam","Long Doi Pagoda, Ha Nam","Bai Dinh Pagoda, Ninh Binh","A"],["Fill in the blank The majority of residents belonging to the Viet-Muong language group are distributed in Viet Nam following four ethnic groups: ..., ..,.., and ...","Viet","Viet- Muong","Viet, Muong, Tho","Viet, Muong, Tho, Chut","D"],["Who is the character that appears the most and is the most famous in the traditional Vietnamese water puppet? (NHUNG HOÀNG)","Chu Teu","Thi Kinh","Chi Pheo","Chi Dau","A"],["Thien Nhan is the symbol of which religion in Vietnam?(NHUNG HOÀNG)","Caodaism","Hoa Hao Buddhism","Christianity","Taoism","A"],["Choose the CORRECT statement about Modern Painting(073-356-8678)","The first generation of modern artists studied classicism and romanticism and followed the poetical realism trend in their works.","Although the first generation of modern artists mastered oil painting, they often preferred to work in mediums such as silk painting, lacquer work, and wood-block engraving.","The pre-1945 world that the first generation of modern arts depicted was an innocent one where life seemed to flow unchanged.","All are correct","D"],["The feudal system of China introduced which social organization into Vietnam during the North period?","The structure of the tribe..","The structure of the village.","The structure of the district.","None of the above structures","C"],["Vietnam's climate is very varied, because...?","Has a large area","Located in a special position","Has a unique terrain","Its elongated shape crosses several degrees of latitude","D"],["What agreement ended US involvement in Vietnam?(NHUNG HOÀNG)","The Paris Peace Accords","The Geneva Accords","The Ho-Sainteny agreement","None of the above","A"],["Who is the first generation of modern artists (who graduated from school in 1930)? (NHUNG HOÀNG)","To Ngoc Van","Nguyen Gia Tri","Tran Van Can","All are correct","D"],["Which belief is incorrect when speaking about Mahayana Buddhism?","Obstinately following the Buddhist scriptures","Do not stubbornly follow Buddhist scriptures","Liberation and enlightenment for many people","Worship of many Buddhas","A"],["In 1961, during an excavation, archaeologists discovered wooden artifacts coated with lacquer and animal skins, providing evidence of the existence of lacquer techniques in the northern Red River Delta region since when?","4th century BC","5th century BC","6th century BC","7th century BC","A"],["What sauce is considered the culinary quintessence of Vietnam?","Soy sauce","Fish sauce","Salt sauce","Pepper sauce","B"],["Characteristic of which one is not present in Vietnamese culture during the period of Northern domination (179 BCE - 938 CE)?","Forced contact and cultural exchange between Vietnamese and Chinese cultures","Colonization and assimilation by the Northern feudalists","Cultural exchange between Vietnamese and Indian cultures","Preservation and conservation of the national cultural identity","C"],["According to Vietnamese beliefs, what factors are considered independent of the body?","Soul","Spirits","Both soul and spirit","The soul and the astral are both attached to the body","C"],["Choose the TRUE statement about sports and leisure in the middle of the 1990s. (NHUNG HOÀNG)","The SRV has given priority to less expensive sports which require little equipment and few training facilities.","Sponsorship of sports activities by private sponsors is prohibited","Only the higher-level athletic competitions, with the official organization, are avidly followed by Vietnamese fans","The international corporations-including producers of soft drinks, cigarettes, and alcoholic beverages- began stopping sponsoring Vietnamese national competitions","A"],["What do people usually do before Tet in Vietnam","Making Banh Chung","Decorating their houses","Paying off or Collecting Debts","All are correct","D"],["Fill in the blank: The stories in water puppet performances can originate from traditional Vietnamese theaters such as... or ....","Cheo or Tuong","Cheo","Tuong","Not mentioned","A"],["Which period does not play a role in fostering the cultural development of the Dai Viet state?","The Ly and Tran Dynasties","The Early Lê Dynasty","The Le Trung Hung Dynasty","The Tay Son Dynasty","D"],["What was Vietnam officially called beginning in 1976?","The Democratic Republic of Vietnam","The Republic of Vietnam","The Socialist Republic of Vietnam","The United States of Vietnam","C"],["What religion is referred to as \"Tự đạo\" in Vietnamese culture?","Cao Daiism","Hoahaoism","Christianity","Buusonkyhuongism","C"],["Which of the following statements is NOT TRUE?","Vernacular characters started to be used in Vietnam during the 13th century","Vernacular characters were created by adopting Chinese characters to represent Vietnamese-language sounds","Vernacular characters produced works that the masses could not understood","None of these answers is correct","C"],["What were the biggest changes of Vietnamese literature under the influence of Tu Luc Van Doan? (Choose TWO options) A. The appearance of New Poetry B. The appearance of New Verses C. The creation of a direct and clear Quoc Ngu modern prose style D. The liberation of Quoc Ngu from Chinese loan words AC Who was the author of A Small Strategy?","Le Minh Khue","Le Luu","Nguyen Huy Thiep","None of these answers is correct","C"],["How did the specialization of labor among villages in the Red River Delta contribute to the production process of handicrafts?","It slowed down the production process due to the need for transportation between villages.","It allowed each village to master a specific step, creating an efficient artisanal chain of production.","It limited the creativity of artisans as they were confined to only one aspect of production.","It caused economic instability as villages became dependent on one another for survival.","B"],["Choose the CORRECT words to fill in the bank: The Temple of Literature (Van Mieu) was dedicated to..., and its grounds served as a royal college.","Buddhism","Taoism","Confucius","None of these answers","C"],["Which is one of three categories in Viet architecture?(NHUNG HOÀNG)","Official buildings","Religious","Fortress","Civilian houses","B"],["How is fish sauce often described?","Rotten fish","Fresh fish","Orangutan fish","No answer is correct","A"],["After being taken from the ground, what is the first step in processing the clay?(NHUNG HOÀNG)","Mixing with oxides","Mixing with water to form a thick paste","Firing in a kiln","Brushing with a glaze","B"],["The United Nations chose which year as the International Year of Rice?","2002","2003","2004","2005","C"],["In 1989, Vietnam exported two million tons of rice and ranked what place in the world?","1","2","3","4","C"],["In the traditional process of making banh Chung for the Vietnamese Lunar New Year (Tết), which type of leaf is commonly used to wrap the cake, helping it keep its square shape and special flavor after boiling?","Sea almond leaf","Lotus leaf","Dong leaf","Almond leaf","C"],["What new parenting norm is gaining acceptance in Vietnam?(NHUNG HOÀNG)","Co-parenting without marriage","Single parenting","Grandparents raising children instead of parents","Adoptive parenting as a primary choice","B"],["According to the cultural researcher Huu Ngoc's account in the book Wandering through Vietnamese Culture (World Publishing House, 2017), many extended families, even entire clans, tend to gather together especially during which holidays?","Ancestor commemoration day","Grave visiting","Renovation of the ancestral house","Ancestor commemoration day, Grave visiting, and Renovation of the ancestral house","D"],["What is the sixty-year cycle in the Vietnamese traditional calendar called?","Thap-can","Thap-nhi-chi","Van-nien luc-giap","Ngu hanh","C"],["(Đúng phải là Lục Thập Hoa Giáp) How did Ca Hue music differ from hat a dao in terms of musical emphasis?(NHUNG HOÀNG)","Ca Huế stressed the melody more than the lyrics.","Ca Huế focused only on lyrics, with no melody.","Ca Huế was primarily vocal with no instrumental accompaniment.","Ca Huế had no instrumental elements.","A"],["Which of the following best characterizes the evolution of tan nhac (modern Vietnamese music) from the 1930s through the 1970s?","It remained strictly traditional and ceremonial throughout the decades","It rejected all Western musical influences in favor of ancient instruments","It transitioned from romantic and revolutionary themes to antiwar reflections","It was exclusively composed by French-trained Vietnamese artists","C"],["Find the wrong answer about: The custom of chewing betel and areca nuts is a tradition of the Vietnamese people, often seen where?","In the New Year's Village Festival","At weddings","The ceremony to welcome the US President","At funerals","A"],["At Tet (Lunar New Year), in the past, the elders often wished each other: \"At the beginning of the year, have a .... ; at the end of the year, have a ...\"","Son Daughter","Daughter-Son","Granddaughter - Grandson","Grandson-Granddaughter","A"],["What do Vietnamese people like to do while eating to make the meal enjoyable?","Eat very fast","Don't eat too fast, don't eat too slow","Place chopsticks on bowl while eating","Dig chopsticks into food to choose delicious pieces","B"],["Which of the following statements is NOT TRUE about Truong Vinh Ky?","He was the first editor of the Gia Dinh Bao","He used to work as an interpreter for Franco-Vietnamese diplomatic missions","He wrote a lot of works in Nom scripts","He served as an instructors in various interpreters' schools","C"],["What was the purpose of the cay neu (bamboo \"tree\") during Tet celebrations?","To symbolize the coming of spring","To celebrate the Lunar New Year with colorful decorations","To mark the household's wealth and prosperity","To attract benevolent spirits and repel malevolent ones","D"],["In Vietnamese, what is the meaning of \"Tet\"? Choose a correct answers.","Festival","Human","Season","Free","A"],["How do young people today compare to previous generations in terms of interest in traditional music?(NHUNG HOÀNG)","They have an interest in traditional music.","They have the same level of interest in traditional music as previous generations.","They do not have the same intense interest in traditional music as previous generations","They are uninterested in traditional music.","C"],["What is the purpose of the intercalary month (tháng nhuận) in the Vietnamese lunar calendar?","To add more festivals","To align with the Gregorian calendar","To synchronize the 355-day year with the 365-day solar year","To adjust for zodiac animal years","C"],["What was the purpose of the le ruoc ong ba ritual during the New Year's Festival?","To celebrate the arrival of spring","To honor the household gods' return from heaven","To offer thanks to the Jade Emperor for his blessings","To invoke ancestors and invite them to take part in the Tet festivities","D"],["As presented by Geoffrey Murray in Culture Smart! Vietnam (2021), according to proper chopstick etiquette, which of the following is correct?","You can pick up multiple pieces of food at once if it's your favorite dish","You should not pick up more than one morsel at a time","Picking up more food shows your skill","It's normal to eat directly from the communal plate","B"],["Who was the pioneer of the New Poetry (Tho moi) movement?","Quang Dung","The Lu","Nguyen Khac Hieu (Tan Da)","None of these answers","B"],["Which is NOT TRUE about wood-block printing?(NHUNG HOÀNG)","It's a creative form of art with unique themes and treatment.","The wood-block printing process starts from drawing of the motif on paper and then gluing it to a block made of persimmon wood","The whole family take parts in processing the woodblock printing.","None of these answers","D"],["According to the cultural researcher Huu Ngoc's account in the book Wandering through Vietnamese Culture (World Publishing House, 2017), In Hanoi during the French colonial period, what items did many well-off middle-class families often display on their tea cabinets?","The Three Deities of Happiness, Prosperity, and Longevity","Set of horizontal lacquered board and parallel scrolls","Carved wooden furniture set","Set of \"Four Noble Plants\" paintings","A"],["According to Geoffrey Murray, the author of Vietnam - Culture Smart !: The Essential Guide to Customs & Culture, what distinctive color is mi quang known for?","Green","Turmeric-tinted","Blue","Red","B"],["What does the evolution of ceramic techniques and styles in Vietnam from the eleventh to the seventeenth century primarily reflect?","A shift from utilitarian objects to purely decorative items","The increasing influence of external cultural and artistic elements","A decline in the quality of craftsmanship due to mass production","The continued importance of ceramics in both everyday life and religious practices","D"],["Which of the following instruments, though derived from Chinese origin, has been adapted in Vietnam and is also known as the dan thap luc?","Dan tranh","Dan ty ba","Dan nguyet","Dan doc huyen","A"],["Which form of music originated in the South and is also called \"amateur music\"?","Hat cai luong","Hat a dao","Nhac tai tu","Ngam tho","C"],["What percentage of the territory of Vietnam is occupied by mountains and plains?","3/4 of the area is hilly and 1/4 is plain","1/2 of the area is hilly and 1/2 is plain","1/4 of the area is hills and mountains and 3/4 of the area is plain","2/3 of the area is hills and mountains and 1/3 of the area is plain","A"],["What is the distinguishing feature of the 'dieu bac\" scale in Vietnamese music?","It is a pentatonic scale with whole tones, conveying happiness or ceremony.","It uses a half-tone scale to express sadness.","It originates from Indian traditions.","It strictly avoids improvisation.","A"],["What natural factors influence the human mind to form the initial understanding of the universe, as well as the origin of the Vietnamese people?","Mountain - Water","Forest - Mountain","Land - Rivers","Land - Water","A"],["Which meat is more popular in Viet Nam?(NHUNG HOÀNG)","Pork, Beef.","Chiken, Pork.","Chicken, Beef.","Pork, Chicken, Beef.","D"],["In what year did archaeologists discover wooden and leather artifacts coated with lacquer buried in the Viet Khe tombs in Vietnam?","1961","1971","1981","1991","A"]];
+
+/* ============================================================
+   ICONS — small inline SVG helpers, consistent stroke style
+   ============================================================ */
+const ICONS = {
+  eye: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
+  eyeOff: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.6 21.6 0 0 1 5.06-6.06M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.6 21.6 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>',
+  star: '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.63 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.63 12 2"/></svg>',
+  starOutline: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.63 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.63 12 2"/></svg>',
+  check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+  checkCircle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+  chevLeft: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>',
+  chevRight: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>',
+  first: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="11 17 6 12 11 7"/><line x1="18" y1="7" x2="18" y2="17"/></svg>',
+  last: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 17 18 12 13 7"/><line x1="6" y1="7" x2="6" y2="17"/></svg>',
+  shuffle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>',
+  sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>',
+  moon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>',
+  search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+  inbox: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>',
+  translate: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l6 6"/><path d="M4 14l6-6 2-3"/><path d="M2 5h12"/><path d="M7 2v3"/><path d="M22 22l-5-10-5 10"/><path d="M14 18h6"/></svg>',
+};
+
+/* ============================================================
+   DATA + PARSER
+   ============================================================ */
+function normalizeRaw(rawArr){
+  return rawArr.map(r => ({ q:r[0], A:r[1], B:r[2], C:r[3], D:r[4], ans:r[5] }));
+}
+
+// Mirrors the offline parser used to build the bundled dataset, so a
+// re-uploaded .txt with the same loose formatting parses the same way.
+function parseTxtToQuestions(text){
+  text = text.replace(/^\uFEFF/, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  const lines = text.split('\n');
+  const anchors = [];
+  const anchorRe = /^[A-D]\.?$/;
+  lines.forEach((l, i) => { if (anchorRe.test(l.trim())) anchors.push(i); });
+
+  function findLast(letter, block){
+    const re = new RegExp('^' + letter + '(?:[.):]\\s*|\\s+)');
+    for (let j = block.length - 1; j >= 0; j--){
+      if (re.test(block[j].trim())) return j;
+    }
+    return null;
+  }
+  function extract(letter, pos, block){
+    if (pos === null) return '';
+    const re = new RegExp('^' + letter + '(?:[.):]\\s*|\\s+)');
+    return block[pos].trim().replace(re, '');
+  }
+
+  const out = [];
+  let prevEnd = 0;
+  for (const a of anchors){
+    const block = lines.slice(prevEnd, a);
+    const answer = lines[a].trim().replace(/\.$/, '');
+    const apos = findLast('A', block);
+    const bpos = findLast('B', block);
+    const cpos = findLast('C', block);
+    const dpos = findLast('D', block);
+    const positions = [apos, bpos, cpos, dpos].filter(p => p !== null);
+    if (positions.length === 0){ prevEnd = a + 1; continue; }
+    const cutoff = Math.min(...positions);
+    const A = extract('A', apos, block);
+    const B = extract('B', bpos, block);
+    const C = extract('C', cpos, block);
+    const D = extract('D', dpos, block);
+    let stemLines = block.slice(0, cutoff)
+      .map(x => x.trim())
+      .filter(x => x && !/check one option\.?/i.test(x));
+    let stem = stemLines.join(' ');
+    stem = stem.replace(/\(Kiểu hỏi khác[\s\S]*?\)/gi, '').trim();
+    if (!stem) stem = '(Câu hỏi không có tiêu đề)';
+    if (A || B || C || D){
+      out.push({ q: stem, A, B, C, D, ans: answer || 'A' });
+    }
+    prevEnd = a + 1;
+  }
+  return out;
+}
+
+let QUESTIONS = normalizeRaw(QUESTIONS_RAW);
+
+/* ============================================================
+   STATE + PERSISTENCE
+   ============================================================ */
+const STORAGE_KEY = 'vnc_quiz_state_v2';
+
+function defaultState(){
+  return {
+    theme: 'dark',
+    viewed: {}, learned: {}, bookmarked: {}, wrongCount: {},
+    translations: {},
+    study: { filter: 'all', search: '', pos: 0, autoReveal: false, revealedNow: false },
+    flash: { filter: 'all', search: '', pos: 0, flipped: false },
+    bookmarks: { pos: 0, revealedNow: false },
+  };
+}
+
+let state = loadState();
+
+function loadState(){
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return defaultState();
+    const parsed = JSON.parse(raw);
+    return Object.assign(defaultState(), parsed, {
+      study: Object.assign(defaultState().study, parsed.study || {}),
+      flash: Object.assign(defaultState().flash, parsed.flash || {}),
+      bookmarks: Object.assign(defaultState().bookmarks, parsed.bookmarks || {}),
+    });
+  } catch (e) { return defaultState(); }
+}
+function saveState(){
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+let toastTimer = null;
+function toast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+/* ============================================================
+   TRANSLATE — Vietnamese meaning helper for the current question
+   ============================================================ */
+async function translateText(text){
+  if (!text || !text.trim()) return '';
+  const url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=vi&dt=t&q=' + encodeURIComponent(text);
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Translate request failed');
+  const data = await res.json();
+  return (data[0] || []).map(chunk => chunk[0]).join('');
+}
+
+function translationContentHtml(t){
+  const letters = ['A','B','C','D'];
+  const optsHtml = letters.map(L => t[L]
+    ? `<div class="translate-opt"><span class="letter">${L}</span><span>${escapeHtml(t[L])}</span></div>`
+    : '').join('');
+  return `<div class="translate-label">${ICONS.translate} Dịch nghĩa tiếng Việt</div>
+    <p class="translate-q">${escapeHtml(t.q)}</p>
+    <div class="translate-opts">${optsHtml}</div>`;
+}
+
+async function toggleTranslate(idx, boxId, btnId){
+  const box = document.getElementById(boxId);
+  const btn = document.getElementById(btnId);
+  if (!box) return;
+  const willOpen = !box.classList.contains('open');
+  box.classList.toggle('open', willOpen);
+  if (btn) btn.classList.toggle('translate-on', willOpen);
+  if (!willOpen) return;
+
+  if (state.translations[idx]){
+    box.innerHTML = translationContentHtml(state.translations[idx]);
+    return;
+  }
+  box.innerHTML = `<div class="translate-loading">${ICONS.translate} Đang dịch câu hiện tại...</div>`;
+  try {
+    const q = QUESTIONS[idx];
+    const parts = [q.q, q.A, q.B, q.C, q.D];
+    const translated = await Promise.all(parts.map(p => (p ? translateText(p) : Promise.resolve(''))));
+    const result = { q: translated[0], A: translated[1], B: translated[2], C: translated[3], D: translated[4] };
+    // guard against stale response if the user navigated away meanwhile
+    if (!document.body.contains(box)) return;
+    state.translations[idx] = result;
+    saveState();
+    box.innerHTML = translationContentHtml(result);
+  } catch (e){
+    box.innerHTML = `<div class="translate-error">Không thể dịch lúc này. Vui lòng kiểm tra kết nối mạng và thử lại.</div>`;
+  }
+}
+
+/* ============================================================
+   FILTER HELPERS
+   ============================================================ */
+function getFilteredIndices(filter, search){
+  const s = (search || '').trim().toLowerCase();
+  const out = [];
+  for (let i = 0; i < QUESTIONS.length; i++){
+    const q = QUESTIONS[i];
+    if (s){
+      const hay = (q.q + ' ' + q.A + ' ' + q.B + ' ' + q.C + ' ' + q.D).toLowerCase();
+      if (!hay.includes(s)) continue;
+    }
+    if (filter === 'learned' && !state.learned[i]) continue;
+    if (filter === 'unlearned' && state.learned[i]) continue;
+    if (filter === 'bookmarked' && !state.bookmarked[i]) continue;
+    if (filter === 'wrong' && !(state.wrongCount[i] >= 2)) continue;
+    out.push(i);
+  }
+  return out;
+}
+
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function highlightMatch(str, search){
+  const safe = escapeHtml(str);
+  if (!search) return safe;
+  try {
+    const re = new RegExp('(' + escapeRegex(search) + ')', 'ig');
+    return safe.replace(re, '<mark style="background:var(--gold);color:var(--lacquer-black);border-radius:3px;padding:0 1px;">$1</mark>');
+  } catch (e) { return safe; }
+}
+function escapeRegex(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+/* ============================================================
+   TABS
+   ============================================================ */
+const TAB_IDS = ['study', 'flash', 'quiz', 'bookmarks', 'stats'];
+let currentTab = 'study';
+
+function switchTab(tab){
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  TAB_IDS.forEach(id => document.getElementById('view-' + id).classList.toggle('active', id === tab));
+  document.getElementById('kbdHint').style.display = (tab === 'quiz' || tab === 'stats') ? 'none' : 'flex';
+  renderCurrentTab();
+}
+function renderCurrentTab(){
+  if (currentTab === 'study') renderStudy();
+  else if (currentTab === 'flash') renderFlash();
+  else if (currentTab === 'quiz') renderQuiz();
+  else if (currentTab === 'bookmarks') renderBookmarks();
+  else if (currentTab === 'stats') renderStats();
+}
+
+/* ============================================================
+   PROGRESS RING (signature Đông Sơn drum motif reused as progress)
+   ============================================================ */
+function ringSvg(pct, size){
+  size = size || 44;
+  const r = size / 2 - 4;
+  const c = 2 * Math.PI * r;
+  const off = c * (1 - pct);
+  return `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--border)" stroke-width="4"/>
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--gold)" stroke-width="4"
+      stroke-dasharray="${c}" stroke-dashoffset="${off}" stroke-linecap="round"
+      transform="rotate(-90 ${size/2} ${size/2})" style="transition:stroke-dashoffset .5s ease"/>
+    <circle cx="${size/2}" cy="${size/2}" r="${r*0.42}" fill="none" stroke="var(--jade)" stroke-width="2" opacity=".55"/>
+  </svg>`;
+}
+
+/* ============================================================
+   STUDY VIEW
+   ============================================================ */
+function clampPos(pos, len){
+  if (len === 0) return 0;
+  return Math.max(0, Math.min(pos, len - 1));
+}
+
+function renderStudy(){
+  const el = document.getElementById('view-study');
+  const st = state.study;
+  const list = getFilteredIndices(st.filter, st.search);
+  st.pos = clampPos(st.pos, list.length);
+  const viewedCount = Object.keys(state.viewed).length;
+  const totalPct = QUESTIONS.length ? viewedCount / QUESTIONS.length : 0;
+
+  let html = '';
+  html += controlRowHtml('study', st.filter, st.search);
+  html += `<div class="progress-wrap">
+    <div class="progress-ring">${ringSvg(totalPct)}</div>
+    <div class="progress-info">
+      <div class="label">Tiến độ tổng thể</div>
+      <div class="value">${viewedCount} / ${QUESTIONS.length} câu đã xem</div>
+      <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${(totalPct*100).toFixed(1)}%"></div></div>
+    </div>
+  </div>`;
+
+  if (list.length === 0){
+    html += emptyStateHtml();
+  } else {
+    const idx = list[st.pos];
+    html += `<div class="card-stage">${questionCardHtml(idx, st.pos, list.length, st.revealedNow, st.search)}</div>`;
+    html += navRowHtml('study');
+    html += `<div class="bulk-row">
+      <button class="nav-btn" id="studyRevealAllBtn">${ICONS.eye} ${st.autoReveal ? 'Ẩn tất cả đáp án' : 'Hiện tất cả đáp án'}</button>
+    </div>`;
+  }
+  el.innerHTML = html;
+  bindCommonCardEvents('study', list);
+  bindControlEvents('study');
+  bindNavEvents('study', list);
+  if (list.length){
+    const revealBtn = document.getElementById('studyRevealAllBtn');
+    if (revealBtn) revealBtn.onclick = () => {
+      st.autoReveal = !st.autoReveal;
+      st.revealedNow = st.autoReveal;
+      saveState(); renderStudy();
+    };
+    markViewed(list[st.pos]);
+  }
+}
+
+function controlRowHtml(prefix, filter, search){
+  return `<div class="control-row">
+    <div class="search-box">
+      ${ICONS.search}
+      <input type="text" id="${prefix}SearchInput" placeholder="Tìm theo từ khóa hoặc nội dung câu hỏi..." value="${escapeHtml(search || '')}">
+    </div>
+    <select class="filter-select" id="${prefix}FilterSelect">
+      <option value="all" ${filter==='all'?'selected':''}>Tất cả</option>
+      <option value="learned" ${filter==='learned'?'selected':''}>Đã học</option>
+      <option value="unlearned" ${filter==='unlearned'?'selected':''}>Chưa học</option>
+      <option value="bookmarked" ${filter==='bookmarked'?'selected':''}>Đã đánh dấu</option>
+      <option value="wrong" ${filter==='wrong'?'selected':''}>Sai nhiều</option>
+    </select>
+  </div>`;
+}
+function bindControlEvents(prefix){
+  const st = state[prefix === 'bookmarks' ? 'bookmarks' : prefix];
+  const searchInput = document.getElementById(prefix + 'SearchInput');
+  const filterSelect = document.getElementById(prefix + 'FilterSelect');
+  if (searchInput){
+    searchInput.oninput = (e) => {
+      state[prefix].search = e.target.value;
+      state[prefix].pos = 0;
+      saveState();
+      renderCurrentTab();
+      // restore focus + caret after re-render
+      requestAnimationFrame(() => {
+        const inp = document.getElementById(prefix + 'SearchInput');
+        if (inp){ inp.focus(); inp.setSelectionRange(inp.value.length, inp.value.length); }
+      });
+    };
+  }
+  if (filterSelect){
+    filterSelect.onchange = (e) => {
+      state[prefix].filter = e.target.value;
+      state[prefix].pos = 0;
+      saveState();
+      renderCurrentTab();
+    };
+  }
+}
+
+function emptyStateHtml(){
+  return `<div class="empty-state">
+    ${ICONS.inbox}
+    <p><strong>Không tìm thấy câu hỏi nào</strong></p>
+    <p>Hãy thử từ khóa khác hoặc đổi bộ lọc.</p>
+  </div>`;
+}
+
+function questionCardHtml(idx, pos, total, revealed, search, boxPrefix){
+  boxPrefix = boxPrefix || 'study';
+  const q = QUESTIONS[idx];
+  const isBookmarked = !!state.bookmarked[idx];
+  const isLearned = !!state.learned[idx];
+  const letters = ['A','B','C','D'];
+  const opts = [q.A, q.B, q.C, q.D];
+  let optsHtml = '';
+  letters.forEach((L, i) => {
+    if (!opts[i]) return;
+    const isCorrect = L === q.ans;
+    const cls = revealed && isCorrect ? 'option correct-reveal' : 'option';
+    optsHtml += `<div class="${cls}">
+      <span class="letter">${L}</span>
+      <span>${highlightMatch(opts[i], search)}</span>
+    </div>`;
+  });
+  const boxId = boxPrefix + 'TranslateBox';
+  const btnId = boxPrefix + 'TranslateBtn';
+  return `<div class="q-card" data-idx="${idx}">
+    <div class="q-meta">
+      <span class="q-counter">Câu ${pos + 1} / ${total}</span>
+      <div class="q-tools">
+        <button class="tool-btn-dich" id="${btnId}" title="Dịch nghĩa tiếng Việt">${ICONS.translate}</button>
+        <button class="tool-btn ${isLearned ? 'learned-on' : ''}" id="learnedBtn" title="Đánh dấu đã học">${ICONS.check}</button>
+        <button class="tool-btn ${isBookmarked ? 'on' : ''}" id="bookmarkBtn" title="Đánh dấu (Bookmark)">${isBookmarked ? ICONS.star : ICONS.starOutline}</button>
+      </div>
+    </div>
+    <p class="q-text">${highlightMatch(q.q, search)}</p>
+    <div class="options">${optsHtml}</div>
+    <div class="reveal-wrap">
+      ${revealed
+        ? `<div class="answer-banner">${ICONS.checkCircle} Đáp án đúng: ${q.ans}. ${escapeHtml(opts[letters.indexOf(q.ans)] || '')}</div>`
+        : `<button class="reveal-btn" id="revealBtn">${ICONS.eye} Hiện đáp án</button>`}
+    </div>
+    <div class="translate-box" id="${boxId}"></div>
+  </div>`;
+}
+
+function bindCommonCardEvents(prefix, list){
+  const stKey = prefix === 'bookmarks' ? 'bookmarks' : prefix;
+  const st = state[stKey];
+  if (!list.length) return;
+  const idx = list[st.pos];
+  const learnedBtn = document.getElementById('learnedBtn');
+  const bookmarkBtn = document.getElementById('bookmarkBtn');
+  const revealBtn = document.getElementById('revealBtn');
+  const translateBtn = document.getElementById(prefix + 'TranslateBtn');
+  if (translateBtn) translateBtn.onclick = () => toggleTranslate(idx, prefix + 'TranslateBox', prefix + 'TranslateBtn');
+  if (learnedBtn) learnedBtn.onclick = () => {
+    if (state.learned[idx]) delete state.learned[idx]; else state.learned[idx] = true;
+    saveState(); renderCurrentTab();
+    toast(state.learned[idx] ? 'Đã đánh dấu: Đã học' : 'Bỏ đánh dấu đã học');
+  };
+  if (bookmarkBtn) bookmarkBtn.onclick = () => {
+    toggleBookmark(idx);
+  };
+  if (revealBtn) revealBtn.onclick = () => {
+    st.revealedNow = true;
+    saveState(); renderCurrentTab();
+  };
+}
+function toggleBookmark(idx){
+  if (state.bookmarked[idx]) delete state.bookmarked[idx]; else state.bookmarked[idx] = true;
+  saveState(); renderCurrentTab();
+  toast(state.bookmarked[idx] ? '⭐ Đã thêm vào Bookmarks' : 'Đã bỏ khỏi Bookmarks');
+}
+function markViewed(idx){
+  if (idx === undefined || idx === null) return;
+  if (!state.viewed[idx]){ state.viewed[idx] = true; saveState(); }
+}
+
+function navRowHtml(prefix){
+  return `<div class="nav-row">
+    <button class="nav-btn" id="${prefix}FirstBtn" title="Câu đầu">${ICONS.first} Đầu</button>
+    <button class="nav-btn" id="${prefix}PrevBtn" title="Câu trước">${ICONS.chevLeft} Trước</button>
+    <button class="nav-btn primary" id="${prefix}RandomBtn" title="Ngẫu nhiên">${ICONS.shuffle} Ngẫu nhiên</button>
+    <button class="nav-btn" id="${prefix}NextBtn" title="Câu tiếp">Tiếp ${ICONS.chevRight}</button>
+    <button class="nav-btn" id="${prefix}LastBtn" title="Câu cuối">Cuối ${ICONS.last}</button>
+  </div>`;
+}
+function bindNavEvents(prefix, list){
+  const stKey = prefix === 'bookmarks' ? 'bookmarks' : prefix;
+  const st = state[stKey];
+  const setPos = (p) => {
+    st.pos = clampPos(p, list.length);
+    st.revealedNow = (stKey === 'study') ? state.study.autoReveal : (stKey === 'flash' ? false : false);
+    if (stKey === 'flash') state.flash.flipped = false;
+    saveState(); renderCurrentTab();
+  };
+  const firstBtn = document.getElementById(prefix + 'FirstBtn');
+  const prevBtn = document.getElementById(prefix + 'PrevBtn');
+  const randomBtn = document.getElementById(prefix + 'RandomBtn');
+  const nextBtn = document.getElementById(prefix + 'NextBtn');
+  const lastBtn = document.getElementById(prefix + 'LastBtn');
+  if (firstBtn) firstBtn.onclick = () => setPos(0);
+  if (prevBtn) prevBtn.onclick = () => setPos(st.pos - 1);
+  if (nextBtn) nextBtn.onclick = () => setPos(st.pos + 1);
+  if (lastBtn) lastBtn.onclick = () => setPos(list.length - 1);
+  if (randomBtn) randomBtn.onclick = () => {
+    if (list.length <= 1) return setPos(0);
+    let p;
+    do { p = Math.floor(Math.random() * list.length); } while (p === st.pos);
+    setPos(p);
+  };
+}
+
+/* ============================================================
+   BOOKMARKS VIEW (reuses study-like card, forced filter)
+   ============================================================ */
+function renderBookmarks(){
+  const el = document.getElementById('view-bookmarks');
+  const st = state.bookmarks;
+  const list = getFilteredIndices('bookmarked', '');
+  st.pos = clampPos(st.pos, list.length);
+  let html = '';
+  if (list.length === 0){
+    html += `<div class="empty-state">${ICONS.star}<p><strong>Chưa có câu nào được đánh dấu</strong></p><p>Bấm biểu tượng ⭐ trên mỗi câu hỏi để lưu vào đây.</p></div>`;
+  } else {
+    const idx = list[st.pos];
+    html += `<div class="card-stage">${questionCardHtml(idx, st.pos, list.length, st.revealedNow, '', 'bookmarks')}</div>`;
+    html += navRowHtml('bookmarks');
+  }
+  el.innerHTML = html;
+  bindCommonCardEvents('bookmarks', list);
+  bindNavEvents('bookmarks', list);
+  if (list.length){
+    const revealBtn = document.getElementById('revealBtn');
+    if (revealBtn) revealBtn.onclick = () => { st.revealedNow = true; saveState(); renderBookmarks(); };
+    markViewed(list[st.pos]);
+  }
+}
+
+/* ============================================================
+   FLASHCARD VIEW
+   ============================================================ */
+function renderFlash(){
+  const el = document.getElementById('view-flash');
+  const st = state.flash;
+  const list = getFilteredIndices(st.filter, st.search);
+  st.pos = clampPos(st.pos, list.length);
+  let html = '';
+  html += controlRowHtml('flash', st.filter, st.search);
+
+  if (list.length === 0){
+    html += emptyStateHtml();
+  } else {
+    const idx = list[st.pos];
+    const q = QUESTIONS[idx];
+    const letters = ['A','B','C','D'];
+    const opts = [q.A,q.B,q.C,q.D];
+    const ansText = opts[letters.indexOf(q.ans)] || '';
+    const isBookmarked = !!state.bookmarked[idx];
+    html += `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <span class="q-counter">Câu ${st.pos+1} / ${list.length}</span>
+      <div class="q-tools">
+        <button class="tool-btn" id="flashTranslateBtn" title="Dịch nghĩa tiếng Việt">${ICONS.translate}</button>
+        <button class="tool-btn ${isBookmarked?'on':''}" id="flashBookmarkBtn">${isBookmarked?ICONS.star:ICONS.starOutline}</button>
+      </div>
+    </div>`;
+    html += `<div class="flash-stage">
+      <div class="flash-card ${st.flipped ? 'flipped' : ''}" id="flashCard">
+        <div class="flash-face flash-front">
+          <span class="eyebrow">Câu hỏi</span>
+          <div class="content">${escapeHtml(q.q)}</div>
+        </div>
+        <div class="flash-face flash-back">
+          <span class="eyebrow" style="color:var(--success);">Đáp án đúng — ${q.ans}</span>
+          <div class="content">${escapeHtml(ansText)}</div>
+        </div>
+      </div>
+      <div class="flash-hint">Bấm vào thẻ hoặc phím Space để lật</div>
+    </div>`;
+    html += `<div class="translate-box" id="flashTranslateBox"></div>`;
+    html += navRowHtml('flash');
+  }
+  el.innerHTML = html;
+  bindControlEvents('flash');
+  bindNavEvents('flash', list);
+  if (list.length){
+    const idx = list[st.pos];
+    document.getElementById('flashCard').onclick = () => {
+      st.flipped = !st.flipped; saveState(); renderFlash();
+    };
+    const bm = document.getElementById('flashBookmarkBtn');
+    if (bm) bm.onclick = (e) => { e.stopPropagation(); toggleBookmark(idx); };
+    const tr = document.getElementById('flashTranslateBtn');
+    if (tr) tr.onclick = (e) => { e.stopPropagation(); toggleTranslate(idx, 'flashTranslateBox', 'flashTranslateBtn'); };
+    markViewed(idx);
+  }
+}
+
+/* ============================================================
+   QUIZ MODE
+   ============================================================ */
+let quizState = null;
+function newQuizSession(){
+  const order = QUESTIONS.map((_, i) => i);
+  for (let i = order.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  quizState = { order, pos: 0, score: 0, selected: null, answered: false, finished: false };
+}
+function renderQuiz(){
+  const el = document.getElementById('view-quiz');
+  if (!quizState) newQuizSession();
+  if (quizState.finished){
+    const pct = quizState.order.length ? Math.round(quizState.score / quizState.order.length * 100) : 0;
+    el.innerHTML = `<div class="q-card quiz-result">
+      <div class="score-big">${quizState.score} / ${quizState.order.length}</div>
+      <p>Bạn đã trả lời đúng ${pct}% số câu trong phiên luyện tập này.</p>
+      <div class="nav-row" style="margin-top:22px;">
+        <button class="nav-btn primary" id="quizRestartBtn">${ICONS.shuffle} Làm lại từ đầu</button>
+      </div>
+    </div>`;
+    document.getElementById('quizRestartBtn').onclick = () => { newQuizSession(); renderQuiz(); };
+    return;
+  }
+  const idx = quizState.order[quizState.pos];
+  const q = QUESTIONS[idx];
+  const letters = ['A','B','C','D'];
+  const opts = [q.A,q.B,q.C,q.D];
+  let optsHtml = '';
+  letters.forEach((L, i) => {
+    if (!opts[i]) return;
+    let cls = 'option quiz-clickable';
+    if (quizState.answered){
+      if (L === q.ans) cls = 'option correct-reveal';
+      else if (L === quizState.selected) cls = 'option quiz-wrong';
+      else cls = 'option dim';
+    }
+    optsHtml += `<div class="${cls}" data-letter="${L}">
+      <span class="letter">${L}</span><span>${escapeHtml(opts[i])}</span>
+    </div>`;
+  });
+  let feedback = '';
+  if (quizState.answered){
+    const correct = quizState.selected === q.ans;
+    feedback = `<div class="answer-banner" style="${correct ? '' : 'background:rgba(166,40,60,.14);border-color:var(--danger);color:var(--lacquer-red-soft);'}">
+      ${correct ? ICONS.checkCircle : ICONS.eyeOff} ${correct ? 'Chính xác!' : 'Chưa đúng.'} Đáp án đúng là ${q.ans}. ${escapeHtml(opts[letters.indexOf(q.ans)] || '')}
+    </div>`;
+  }
+  el.innerHTML = `
+    <div class="quiz-progress">
+      <span>Câu ${quizState.pos + 1} / ${quizState.order.length}</span>
+      <span class="quiz-score-badge">Điểm: ${quizState.score}</span>
+    </div>
+    <div class="progress-bar-track" style="margin-bottom:16px;"><div class="progress-bar-fill" style="width:${(quizState.pos/quizState.order.length*100)}%"></div></div>
+    <div class="q-card">
+      <div class="q-meta">
+        <span></span>
+        <div class="q-tools">
+          <button class="tool-btn" id="quizTranslateBtn" title="Dịch nghĩa tiếng Việt">${ICONS.translate}</button>
+        </div>
+      </div>
+      <p class="q-text">${escapeHtml(q.q)}</p>
+      <div class="options">${optsHtml}</div>
+      ${feedback}
+      <div class="translate-box" id="quizTranslateBox"></div>
+    </div>
+    <div class="nav-row">
+      <button class="nav-btn primary" id="quizNextBtn" ${quizState.answered ? '' : 'disabled'}>
+        ${quizState.pos === quizState.order.length - 1 ? 'Xem kết quả' : 'Câu tiếp theo'} ${ICONS.chevRight}
+      </button>
+    </div>`;
+  const quizTranslateBtn = document.getElementById('quizTranslateBtn');
+  if (quizTranslateBtn) quizTranslateBtn.onclick = () => toggleTranslate(idx, 'quizTranslateBox', 'quizTranslateBtn');
+  el.querySelectorAll('.option[data-letter]').forEach(optEl => {
+    optEl.onclick = () => {
+      if (quizState.answered) return;
+      const L = optEl.dataset.letter;
+      quizState.selected = L;
+      quizState.answered = true;
+      if (L === q.ans) quizState.score++;
+      else state.wrongCount[idx] = (state.wrongCount[idx] || 0) + 1;
+      state.viewed[idx] = true;
+      saveState();
+      renderQuiz();
+    };
+  });
+  const nextBtn = document.getElementById('quizNextBtn');
+  if (nextBtn) nextBtn.onclick = () => {
+    if (quizState.pos === quizState.order.length - 1){
+      quizState.finished = true;
+    } else {
+      quizState.pos++;
+      quizState.selected = null;
+      quizState.answered = false;
+    }
+    renderQuiz();
+  };
+}
+
+/* ============================================================
+   STATS VIEW
+   ============================================================ */
+function renderStats(){
+  const el = document.getElementById('view-stats');
+  const total = QUESTIONS.length;
+  const viewedCount = Object.keys(state.viewed).length;
+  const learnedCount = Object.keys(state.learned).length;
+  const bookmarkedCount = Object.keys(state.bookmarked).length;
+  const wrongCount = Object.values(state.wrongCount).filter(v => v >= 2).length;
+  const pct = total ? (viewedCount / total * 100) : 0;
+
+  el.innerHTML = `
+    <div class="stats-grid">
+      <div class="stat-card"><div class="num">${total}</div><div class="lbl">Tổng số câu</div></div>
+      <div class="stat-card success"><div class="num">${learnedCount}</div><div class="lbl">Đã học</div></div>
+      <div class="stat-card accent"><div class="num">${bookmarkedCount}</div><div class="lbl">Bookmark</div></div>
+      <div class="stat-card"><div class="num">${viewedCount}</div><div class="lbl">Đã xem</div></div>
+      <div class="stat-card danger"><div class="num">${wrongCount}</div><div class="lbl">Sai nhiều lần</div></div>
+    </div>
+    <div class="completion-block">
+      <h3>Tỷ lệ hoàn thành</h3>
+      <div class="big-bar-track"><div class="big-bar-fill" style="width:${pct.toFixed(1)}%"></div></div>
+      <div class="completion-pct">${pct.toFixed(1)}% (${viewedCount}/${total} câu đã xem)</div>
+    </div>
+    <div class="nav-row">
+      <button class="nav-btn" id="resetStatsBtn" style="border-color:var(--lacquer-red-soft);color:var(--lacquer-red-soft);">Xóa toàn bộ tiến độ đã lưu</button>
+    </div>`;
+  document.getElementById('resetStatsBtn').onclick = () => {
+    if (confirm('Xóa toàn bộ tiến độ (đã học, bookmark, đã xem, thống kê sai)? Hành động này không thể hoàn tác.')){
+      const theme = state.theme;
+      const translations = state.translations;
+      state = defaultState();
+      state.theme = theme;
+      state.translations = translations;
+      saveState();
+      quizState = null;
+      toast('Đã xóa toàn bộ tiến độ');
+      renderCurrentTab();
+    }
+  };
+}
+
+/* ============================================================
+   THEME
+   ============================================================ */
+function applyTheme(){
+  document.documentElement.setAttribute('data-theme', state.theme === 'light' ? 'light' : 'dark');
+  const btn = document.getElementById('themeToggleBtn');
+  btn.innerHTML = state.theme === 'light' ? ICONS.moon : ICONS.sun;
+}
+document.getElementById('themeToggleBtn').addEventListener('click', () => {
+  state.theme = state.theme === 'light' ? 'dark' : 'light';
+  saveState(); applyTheme();
+});
+
+/* ============================================================
+   UPLOAD PANEL
+   ============================================================ */
+document.getElementById('uploadToggleBtn').addEventListener('click', () => {
+  document.getElementById('uploadPanel').classList.toggle('open');
+});
+document.getElementById('fileInput').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const statusEl = document.getElementById('uploadStatus');
+  statusEl.style.color = 'var(--text-soft)';
+  statusEl.textContent = 'Đang đọc và phân tích file...';
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      const parsed = parseTxtToQuestions(ev.target.result);
+      if (!parsed.length){
+        statusEl.style.color = 'var(--lacquer-red-soft)';
+        statusEl.textContent = 'Không nhận diện được câu hỏi nào trong file này.';
+        return;
+      }
+      QUESTIONS = parsed;
+      state = defaultState();
+      saveState();
+      quizState = null;
+      statusEl.style.color = 'var(--success)';
+      statusEl.textContent = `✓ Đã nạp thành công ${parsed.length} câu hỏi.`;
+      toast(`Đã tải bộ câu hỏi mới: ${parsed.length} câu`);
+      switchTab('study');
+    } catch (err){
+      statusEl.style.color = 'var(--lacquer-red-soft)';
+      statusEl.textContent = 'Có lỗi khi phân tích file: ' + err.message;
+    }
+  };
+  reader.readAsText(file, 'UTF-8');
+});
+
+/* ============================================================
+   TAB WIRING
+   ============================================================ */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+});
+
+/* ============================================================
+   KEYBOARD SHORTCUTS
+   ============================================================ */
+document.addEventListener('keydown', (e) => {
+  const tag = (e.target.tagName || '').toLowerCase();
+  if (tag === 'input' || tag === 'select' || tag === 'textarea') return;
+  if (!['study', 'flash', 'bookmarks'].includes(currentTab)) return;
+
+  const stKey = currentTab;
+  const list = currentTab === 'study' ? getFilteredIndices(state.study.filter, state.study.search)
+             : currentTab === 'flash' ? getFilteredIndices(state.flash.filter, state.flash.search)
+             : getFilteredIndices('bookmarked', '');
+  const st = state[stKey];
+  if (!list.length) return;
+  const idx = list[st.pos];
+
+  if (e.key === 'ArrowLeft'){ e.preventDefault(); st.pos = clampPos(st.pos - 1, list.length); resetRevealOnNav(stKey); saveState(); renderCurrentTab(); }
+  else if (e.key === 'ArrowRight'){ e.preventDefault(); st.pos = clampPos(st.pos + 1, list.length); resetRevealOnNav(stKey); saveState(); renderCurrentTab(); }
+  else if (e.code === 'Space'){
+    e.preventDefault();
+    if (currentTab === 'flash'){ state.flash.flipped = !state.flash.flipped; }
+    else { st.revealedNow = true; }
+    saveState(); renderCurrentTab();
+  }
+  else if (e.key === 'b' || e.key === 'B'){ e.preventDefault(); toggleBookmark(idx); }
+  else if (e.key === 'r' || e.key === 'R'){
+    e.preventDefault();
+    if (list.length > 1){
+      let p; do { p = Math.floor(Math.random() * list.length); } while (p === st.pos);
+      st.pos = p; resetRevealOnNav(stKey); saveState(); renderCurrentTab();
+    }
+  }
+});
+function resetRevealOnNav(stKey){
+  if (stKey === 'study') state.study.revealedNow = state.study.autoReveal;
+  else if (stKey === 'bookmarks') state.bookmarks.revealedNow = false;
+  else if (stKey === 'flash') state.flash.flipped = false;
+}
+
+/* ============================================================
+   LOGO — Đông Sơn drum motif
+   ============================================================ */
+function renderDrumLogo(){
+  document.getElementById('drumLogo').innerHTML = `
+  <svg viewBox="0 0 40 40" fill="none">
+    <circle cx="20" cy="20" r="18.5" stroke="var(--gold)" stroke-width="1"/>
+    <circle cx="20" cy="20" r="14.5" stroke="var(--gold)" stroke-width="1" opacity=".7"/>
+    <circle cx="20" cy="20" r="10.5" stroke="var(--lacquer-red-soft)" stroke-width="1" opacity=".8"/>
+    <g stroke="var(--gold)" stroke-width="1" opacity=".55">
+      <line x1="20" y1="1.5" x2="20" y2="8"/>
+      <line x1="20" y1="32" x2="20" y2="38.5"/>
+      <line x1="1.5" y1="20" x2="8" y2="20"/>
+      <line x1="32" y1="20" x2="38.5" y2="20"/>
+      <line x1="6.6" y1="6.6" x2="11" y2="11"/>
+      <line x1="29" y1="29" x2="33.4" y2="33.4"/>
+      <line x1="33.4" y1="6.6" x2="29" y2="11"/>
+      <line x1="11" y1="29" x2="6.6" y2="33.4"/>
+    </g>
+    <g fill="var(--gold)">
+      <polygon points="20,13 21.6,18.4 27,20 21.6,21.6 20,27 18.4,21.6 13,20 18.4,18.4"/>
+    </g>
+  </svg>`;
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+function init(){
+  applyTheme();
+  renderDrumLogo();
+  switchTab('study');
+}
+init();
+
+</script>
+</body>
+</html>
